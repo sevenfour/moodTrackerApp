@@ -1,7 +1,8 @@
-# mood-tracker-app
+# Mood Tracker App
 
-This README outlines the details of collaborating on this Ember application.
-A short introduction of this app could easily go here.
+This is Starling Minds Mood Tracker progressive web app which targets mobile devices first.
+The app is intended to behave close to native apps on mobile devices while also work as a web app
+with offline capabilities. 
 
 ## Prerequisites
 
