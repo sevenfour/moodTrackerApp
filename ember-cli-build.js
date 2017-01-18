@@ -3,6 +3,15 @@ var EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
 module.exports = function(defaults) {
     let app = new EmberApp(defaults, {
+        outputPaths: {
+            app: {
+                css: {
+                  'app': '/assets/moodtracker.css'
+                },
+                js: '/assets/moodtracker.js'
+            }
+        },
+
         fingerprint: {
             exclude: ['img']
         },
