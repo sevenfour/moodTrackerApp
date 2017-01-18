@@ -1,0 +1,586 @@
+/* Starling Minds Mood Tracker app core styles - START - ---------------------------------------- */
+
+p {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+}
+
+button[ disabled ],
+.disabled,
+.ember-view.disabled {
+    cursor: not-allowed;
+}
+
+a[ data-ember-action ] {
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.btn.disabled {
+    pointer-events: auto;
+}
+
+input[ type = 'radio' ],
+input[ type = 'checkbox' ] {
+    cursor: pointer;
+}
+
+.page {
+    margin-top: 3.779em;
+}
+
+.no-padding-left {
+    padding-left: 0;
+}
+
+.no-padding-right {
+    padding-right: 0;
+}
+
+.no-padding-left-right {
+    padding-right: 0;
+    padding-left: 0;
+}
+
+.btn-custom,
+.btn-custom-filled,
+.btn-discouraged,
+.btn-functionality,
+.btn-no,
+.btn-yes {
+    border: 2px solid $btn-color;
+    border-radius: 25px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+    background-color: $white;
+    padding: 0 1.25em;
+    line-height: 46px;
+    letter-spacing: 0.044em;
+    color: $btn-color;
+    font-family: 'Uniform Rounded Bold';
+    font-size: 22px;
+}
+
+.btn-custom-filled {
+    background-color: $btn-color;
+    color: $white;
+}
+
+.btn-discouraged {
+    border-color: $ink-navy;
+    color: $ink-navy;
+}
+
+.btn-primary-second {
+    padding: 0 3.25em;
+
+    @media ( max-width: $screen-xs-max ) {
+        padding-right: 2.25em;
+        padding-left: 2.25em;
+    }
+}
+
+.btn-functionality {
+    border-color: $true-blue;
+    padding: 0 1.667em;
+    line-height: 26px;
+    color: $true-blue;
+    font-size: 18px;
+}
+
+.btn-no,
+.btn-yes {
+    border-width: 2px;
+    padding: 0.111em 0.556em;
+    line-height: 22px;
+    font-size: 18px;
+}
+
+.btn-no {
+    border-color: $watermelon-red;
+    color: $watermelon-red;
+}
+
+.btn-yes {
+    border-color: $clear-blue;
+    color: $clear-blue;
+}
+
+.btn-custom:hover,
+.btn-custom:focus,
+.btn-custom:active,
+.btn-custom.active {
+    border-color: $btn-hover-color;
+    background-color: $btn-hover-color;
+    color: $white;
+}
+
+.btn-custom-filled:hover,
+.btn-custom-filled:focus,
+.btn-custom-filled:active,
+.btn-custom-filled.active {
+    border-color: $tangerine-orange;
+    background-color: $tangerine-orange;
+    color: $white;
+}
+
+.btn-discouraged:hover,
+.btn-discouraged:focus,
+.btn-discouraged:active {
+    background-color: $ink-navy;
+    color: $white;
+}
+
+.btn {
+    &.active,
+    &:active {
+        box-shadow: none;
+    }
+}
+
+.btn-custom.disabled:hover,
+.btn-custom.disabled:focus,
+.btn-custom.disabled:active,
+.btn-custom.disabled.active,
+.btn-custom[ disabled ],
+.btn-custom[ disabled ]:hover,
+.btn-custom[ disabled ]:focus,
+.btn-custom[ disabled ]:active,
+.btn-custom[ disabled ].active,
+fieldset[ disabled ] .btn-custom:hover,
+fieldset[ disabled ] .btn-custom:focus,
+fieldset[ disabled ] .btn-custom:active,
+fieldset[ disabled ] .btn-custom.active {
+    $opacity: 30;
+
+    @include opacity($opacity);
+}
+
+.btn-custom-filled.disabled:hover,
+.btn-custom-filled.disabled:focus,
+.btn-custom-filled.disabled:active,
+.btn-custom-filled.disabled.active,
+.btn-custom-filled[ disabled ],
+.btn-custom-filled[ disabled ]:hover,
+.btn-custom-filled[ disabled ]:focus,
+.btn-custom-filled[ disabled ]:active,
+.btn-custom-filled[ disabled ].active,
+fieldset[ disabled ] .btn-custom-filled:hover,
+fieldset[ disabled ] .btn-custom-filled:focus,
+fieldset[ disabled ] .btn-custom-filled:active,
+fieldset[ disabled ] .btn-custom-filled.active {
+    $opacity: 30;
+
+    @include opacity($opacity);
+}
+
+.btn-functionality:hover,
+.btn-functionality:focus,
+.btn-functionality:active {
+    background-color: $true-blue;
+    color: $white;
+}
+
+.btn-no:hover,
+.btn-no:focus,
+.btn-no:active {
+    background-color: $watermelon-red;
+    color: $white;
+}
+
+.btn-yes:hover,
+.btn-yes:focus,
+.btn-yes:active {
+    background-color: $clear-blue;
+    color: $white;
+}
+
+.btn-functionality.disabled:hover,
+.btn-functionality.disabled:focus,
+.btn-functionality.disabled:active,
+.btn-functionality[ disabled ],
+.btn-functionality[ disabled ]:hover,
+.btn-functionality[ disabled ]:focus,
+.btn-functionality[ disabled ]:active,
+fieldset[ disabled ] .btn-functionality:hover,
+fieldset[ disabled ] .btn-functionality:focus,
+fieldset[ disabled ] .btn-functionality:active,
+.btn-no.disabled:hover,
+.btn-no.disabled:focus,
+.btn-no.disabled:active,
+.btn-no[ disabled ],
+.btn-no[ disabled ]:hover,
+.btn-no[ disabled ]:focus,
+.btn-no[ disabled ]:active,
+fieldset[ disabled ] .btn-no:hover,
+fieldset[ disabled ] .btn-no:focus,
+fieldset[ disabled ] .btn-no:active,
+.btn-yes.disabled:hover,
+.btn-yes.disabled:focus,
+.btn-yes.disabled:active,
+.btn-yes[ disabled ],
+.btn-yes[ disabled ]:hover,
+.btn-yes[ disabled ]:focus,
+.btn-yes[ disabled ]:active,
+fieldset[ disabled ] .btn-yes:hover,
+fieldset[ disabled ] .btn-yes:focus,
+fieldset[ disabled ] .btn-yes:active {
+    $opacity: 30;
+
+    @include opacity($opacity);
+}
+
+.btn-round-with-icon {
+    position: relative;
+    border: 3px solid $ink-navy;
+    border-radius: 50%;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+    background-color: $white;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    touch-action: manipulation;
+    user-select: none;
+
+    .icon {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        margin: auto;
+
+        > path {
+            fill: $ink-navy;
+        }
+    }
+
+    &:hover,
+    &:focus,
+    &:active {
+        background-color: $ink-navy;
+
+        .icon {
+            > path {
+                fill: $white;
+            }
+        }
+    }
+}
+
+.btn-round-with-icon.disabled:hover,
+.btn-round-with-icon.disabled:focus,
+.btn-round-with-icon.disabled:active,
+.btn-round-with-icon[ disabled ],
+.btn-round-with-icon[ disabled ]:hover,
+.btn-round-with-icon[ disabled ]:focus,
+.btn-round-with-icon[ disabled ]:active,
+fieldset[ disabled ] .btn-round-with-icon:hover,
+fieldset[ disabled ] .btn-round-with-icon:focus,
+fieldset[ disabled ] .btn-round-with-icon:active {
+    $opacity: 30;
+
+    @include opacity($opacity);
+}
+
+/* General styles - END - ----------------------------------------------------------------------- */
+
+/* Header navigation styles - START - ----------------------------------------------------------- */
+
+.navbar-default {
+    margin-bottom: 0;
+    height: 60px;
+    filter: drop-shadow(0 3px 4px rgba(149, 152, 154, 0.5));
+
+    .starling-logo {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        margin: auto;
+        width: 170px;
+        height: 48px;
+
+        @media ( min-width: $screen-sm-min ) {
+            transform: translateY(-1%);
+            margin-right: 0;
+            margin-left: 0;
+        }
+
+        @media ( min-width: $screen-sm-min ) and ( max-width: 800px ) {
+            left: 35px;
+        }
+
+        @media ( min-width: $screen-md-min ) {
+            left: 15px;
+        }
+
+        @media ( min-width: 1050px ) {
+            left: 5%;
+        }
+    }
+
+    .header-fr {
+        .starling-logo {
+            @media ( min-width: $screen-sm-min ) and ( max-width: 800px ) {
+                width: 152px;
+                height: 30px;
+            }
+        }
+    }
+
+    .icon-sandwich {
+        width: 26px;
+        height: 26px;
+    }
+
+    .navbar-collapse {
+        border-top: none;
+        background-color: $white;
+
+        @media ( min-width: $screen-sm-min ) {
+            background-color: transparent;
+        }
+    }
+
+    .navbar-nav.primary {
+        padding-right: 5px;
+
+        @media ( min-width: $screen-sm-min ) {
+            padding-right: 5%;
+        }
+
+        @media ( min-width: $screen-md-min ) {
+            padding-right: 10%;
+        }
+    }
+}
+
+.navbar-nav {
+    .userName,
+    .navbar-link {
+        color: $cement-grey;
+        font-family: 'Uniform Rounded Regular';
+        font-size: 18px;
+
+        &.navbar-link-fr {
+            @media ( min-width: $screen-sm-min ) and ( max-width: 1200px ) {
+                font-size: 14px;
+            }
+        }
+    }
+
+    .navbar-item {
+        padding-left: 15px;
+
+        .navbar-link {
+            margin: 0;
+            padding: 0;
+            line-height: 60px;
+            color: $cement-grey;
+
+            @media ( min-width: $screen-sm-min ) and ( max-width: 815px ) {
+                margin-right: 5px;
+                margin-left: 5px;
+            }
+
+            @media ( min-width: 816px ) and ( max-width: 850px ) {
+                margin-right: 10px;
+                margin-left: 10px;
+            }
+
+            @media ( min-width: 851px ) {
+                margin-right: 15px;
+                margin-left: 15px;
+            }
+
+            @media ( min-width: $screen-md-min ) and ( max-width: 1100px ) {
+                margin-right: 25px;
+                margin-left: 25px;
+            }
+
+            @media ( min-width: 1101px ) {
+                margin-right: 30px;
+                margin-left: 30px;
+            }
+
+            @media ( min-width: 1150px ) {
+                margin-right: 35px;
+                margin-left: 35px;
+            }
+
+            &.active {
+                color: $true-blue;
+            }
+
+            &.active:focus,
+            &.active:active,
+            &.active:hover {
+                color: $sky-blue;
+            }
+
+            &.disabled {
+                color: $cloudy-navy;
+            }
+        }
+
+        @media ( min-width: $screen-sm-min ) {
+            padding-left: 0;
+        }
+    }
+
+    &.navbar-nav-fr {
+        .userName,
+        .navbar-link {
+            line-height: 65px;
+            font-size: 13px;
+
+            @media ( min-width: $screen-sm-min ) and ( max-width: 850px ) {
+                margin-right: 5px;
+                margin-left: 5px;
+            }
+
+            @media ( min-width: 851px ) {
+                margin-right: 10px;
+                margin-left: 10px;
+            }
+
+            @media ( min-width: 900px ) {
+                font-size: 14px;
+            }
+
+            @media ( min-width: $screen-md-min ) and ( max-width: 1100px ) {
+                margin-right: 15px;
+                margin-left: 15px;
+            }
+
+            @media ( min-width: 1101px ) {
+                margin-right: 20px;
+                margin-left: 20px;
+            }
+
+            @media ( min-width: 1150px ) {
+                margin-right: 25px;
+                margin-left: 25px;
+            }
+
+            @media ( min-width: 1250px ) {
+                font-size: 16px;
+            }
+        }
+    }
+
+    .icon-caret {
+        margin-left: 15px;
+        width: 25px;
+        height: 25px;
+
+        .icon-caret-path {
+            transform: translateY(40%);
+            fill: $cement-grey;
+        }
+    }
+
+    .dropdown-toggle {
+        border: none;
+        background: transparent;
+        padding: 0;
+        line-height: 60px;
+        color: $cement-grey;
+
+        @media ( max-width: $screen-xs-max ) {
+            margin-left: 15px;
+            padding-left: 0;
+        }
+
+        @media ( min-width: $screen-sm-min ) {
+            margin-left: 15px;
+        }
+
+        @media ( min-width: $screen-md-min ) {
+            margin-left: 45px;
+        }
+
+        &:hover {
+            .userName {
+                color: $true-blue;
+            }
+
+            .icon-caret {
+                > path {
+                    fill: $true-blue;
+                }
+            }
+        }
+    }
+
+    .dropdown-menu {
+        margin-top: 0;
+        border-radius: 5px;
+        border-color: $cloudy-navy;
+        padding: 5px 15px;
+        min-width: 12.5em;
+        filter: drop-shadow(0 1px 3px rgba(198, 198, 198, 0.5));
+
+        .dropdown-menu-item:last-child {
+            margin-bottom: 5px;
+        }
+    }
+
+    .dropdown {
+        @media ( min-width: $screen-sm-min ) {
+            .dropdown-menu {
+                display: block;
+                transition: all 350ms ease;
+                opacity: 0;
+                max-height: 0;
+                overflow: hidden;
+            }
+
+            &.open {
+                .dropdown-menu {
+                    opacity: 1;
+                    max-height: 300px;
+                }
+            }
+        }
+    }
+
+    .starling-id-title {
+        display: block;
+        margin-top: 10px;
+        color: $cement-grey;
+        font-size: $font-size-small;
+    }
+
+    .divider {
+        margin: 10px 0;
+        color: $cloudy-navy;
+    }
+
+    .starlingId,
+    .menu-item-btn {
+        padding: 0;
+        font-weight: 300;
+    }
+
+    .starlingId {
+        display: block;
+        margin-top: 10px;
+        padding: 3px 0;
+    }
+
+    .menu-item-btn {
+        border: none;
+        background-color: transparent;
+        color: $text-color;
+
+        &:hover {
+            color: $true-blue;
+        }
+    }
+}
+
+/* Header navigation styles - END - ------------------------------------------------------------- */
+
+/* Starling Minds Mood Tracker app core styles - END - ------------------------------------------ */

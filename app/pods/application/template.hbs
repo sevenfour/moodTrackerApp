@@ -1,0 +1,10 @@
+{{app-header
+    imgSource='logo'
+    firstName=model.user.firstName
+    nickname=model.user.nickname
+    currentPath=currentPath
+    switchLanguage='switchLanguage'
+    logout='doLogout'}}
+<div class="container-fluid no-padding-left-right">
+    {{outlet}}
+</div>

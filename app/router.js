@@ -1,12 +1,17 @@
-import Ember from 'ember';
+import Router from 'ember-router';
 import config from './config/environment';
 
-const Router = Ember.Router.extend({
+const appRouter = Router.extend({
   location: config.locationType,
   rootURL: config.rootURL
 });
 
-Router.map(function() {
+appRouter.map(function() {
+    this.route('moods', { path: '/' }, function() {
+        this.route('add', { path: '/add' });
+        this.route('edit', { path: '/edit/:id' });
+        this.route('list', { path: '/list' });
+    });
 });
 
-export default Router;
+export default appRouter;
