@@ -1,5 +1,5 @@
 <!DOCTYPE html lang="en">
-<html>
+<html manifest="manifest.appcache">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -27,6 +27,20 @@
         {{content-for "head-footer"}}
     </head>
     <body>
+        <script>
+            if (!'serviceWorker' in navigator) {
+                window.addEventListener('load', (e) => {
+                    window.applicationCache.addEventListener('updateready', (e) => {
+                        if (window.applicationCache.status ===
+                            window.applicationCache.UPDATEREADY) {
+                            window.applicationCache.swapCache();
+                            window.location.reload();
+                        }
+                    }, false);
+                }, false);
+            }
+        </script>
+
         {{content-for "body"}}
 
         <script src="{{rootURL}}assets/vendor.js"></script>

@@ -25,6 +25,24 @@ module.exports = function(environment) {
       }
     };
 
+    ENV.manifest = {
+        enabled: true,
+        appcacheFile: "/manifest.appcache",
+        excludePaths: [
+            'index.html',
+            'robots.txt',
+            'crossdomain.xml',
+            'testem.js',
+            'tests/index.html',
+            'assets/failed.png',
+            'assets/passed.png',
+            new RegExp(/^assets\/tests./),
+            new RegExp(/^assets\/test-/)
+        ],
+        includePaths: ['/'],
+        showCreateDate: true
+    }
+
     ENV.serviceWorker = {
         enabled: true,
         debug: true,
