@@ -23,6 +23,9 @@ module.exports = function(defaults) {
             paths: [
                 'app/svg-store'
             ]
+        },
+
+        inlineContent: {
         }
     });
 
