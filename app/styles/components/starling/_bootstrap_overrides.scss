@@ -1,3 +1,22 @@
+/* vendor.css - START - ------------------------------------------------------------------------- */
+
+.liquid-container {
+    position: relative;
+
+    /* without this, overflow:hidden won't take effect because the things
+       we're trying to hide are on a separate accelerated
+       context. Also, this prevents a tiny vertical jump when the
+       content switches to accelerated.  */
+    transform: translateY(0);
+    overflow: hidden;
+}
+
+.liquid-child {
+    overflow: hidden; /* Prevent margin collapse */
+}
+
+/* vendor.css - END - --------------------------------------------------------------------------- */
+
 /* Starling Minds Mood Tracker app core styles - START - ---------------------------------------- */
 
 p {
@@ -41,7 +60,7 @@ input[ type = 'checkbox' ] {
     padding-right: 0;
     padding-left: 0;
 }
-
+// dsfkldsfklj
 .btn-custom,
 .btn-custom-filled,
 .btn-discouraged,
@@ -584,3 +603,23 @@ fieldset[ disabled ] .btn-round-with-icon:active {
 /* Header navigation styles - END - ------------------------------------------------------------- */
 
 /* Starling Minds Mood Tracker app core styles - END - ------------------------------------------ */
+
+/* Starling Minds Mood Tracker components styles - START - -------------------------------------- */
+
+.toast-update-ready {
+    position: absolute;
+    top: 4.779em;
+    visibility: hidden;
+    background-color: $bright-green;
+
+    &.update-ready {
+        visibility: visible;
+    }
+
+    .message-text {
+        color: $cement-grey;
+        font-family: 'Uniform Rounded Regular';
+    }
+}
+
+/* Starling Minds Mood Tracker components styles - END - ---------------------------------------- */

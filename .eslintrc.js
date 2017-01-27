@@ -11,15 +11,20 @@ module.exports = {
     env: {
         browser: true
     },
+    globals: {
+        '$': true,
+        'debug': true,
+        'Promise': true
+    },
     rules: {
         'indent': 'off',
         'one-var': ["error", { var: "always", let: "never", const: "never" }],
         'array-bracket-spacing': [
-            "error", "always", {
-                "singleValue": false, "objectsInArrays": false, "arraysInArrays": false
+            'error', 'always', {
+                'singleValue': false, 'objectsInArrays': false, 'arraysInArrays': false
             }
         ],
-        "ember-suave/prefer-destructuring": 'off',
+        'ember-suave/prefer-destructuring': 'off',
         'ember-suave/no-const-outside-module-scope': 'off'
     }
 };

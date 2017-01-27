@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="description" content="Starling Minds Mood Tracker application">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0">
         <meta name="application-name" content="StarlingMood">
 
         <link rel="manifest" href="/manifest.json">
@@ -25,7 +25,6 @@
 
         {{content-for "head"}}
 
-        <link rel="stylesheet" href="{{rootURL}}assets/vendor.css">
         <link rel="stylesheet" href="{{rootURL}}assets/moodtracker.css">
 
         {{content-for "head-footer"}}
@@ -33,8 +32,8 @@
     <body>
         {{content-for "body"}}
 
-        <script src="{{rootURL}}assets/vendor.js"></script>
-        <script src="{{rootURL}}assets/moodtracker.js"></script>
+        <script src="{{rootURL}}assets/vendor.js" defer></script>
+        <script src="{{rootURL}}assets/moodtracker.js" defer></script>
 
         {{content-for "body-footer"}}
     </body>

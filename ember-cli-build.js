@@ -25,6 +25,7 @@ module.exports = function(defaults) {
             ]
         },
 
+        // ember-cli-inline-content
         inlineContent: {
         }
     });

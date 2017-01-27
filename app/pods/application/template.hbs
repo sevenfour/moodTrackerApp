@@ -7,4 +7,7 @@
     logout='doLogout'}}
 <div class="container-fluid no-padding-left-right">
     {{outlet}}
+    {{toast-update-ready
+        class='col-xs-12 col-sm-4 col-md-4'
+        message='New version available'}}
 </div>

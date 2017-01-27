@@ -1,32 +1,54 @@
 import debug from 'ember-debug';
 
-export function initialize(/* appInstance */) {
+const { log } = debug;
+
+export function initialize(appInstance) {
     'use strict';
 
-    // appInstance.inject('route', 'foo', 'service:foo');
-
     if ('serviceWorker' in window.navigator) {
-        window.navigator.serviceWorker.register('/service-worker.js').then((reg) => {
-            debug.log('Service Worker successfully registered.');
+        window.navigator.serviceWorker.register('/service-worker.js', { scope: './' }).then((reg) => {
+            log('Service Worker successfully registered.');
+
+            // Get notify service
+            let notify = appInstance.lookup('service:notify');
 
             if (reg.waiting) {
-                debug.log('New version available!');
+                log('req.waiting: update is waiting');
+                this.updateReady(reg.waiting, notify);
+
                 return;
             }
 
             if (reg.installing) {
-                debug.log('Installing');
+                log('reg.installing: update in progress');
+
+                this.trackInstalling(reg.installing).then((worker) => {
+                    this.updateReady(worker, notify);
+                });
                 return;
             }
 
-            reg.addEventListener('updatefound', () =>  {
-                debug.log('Update found');
-            });
+            reg.onupdatefound = () =>  {
+                log('Update found');
+                this.trackInstalling(reg.installing).then((worker) => {
+                    this.updateReady(worker, notify);
+                });
+            };
         }).catch((error) => {
-            debug.log(`An error occured registering Service Wroker: ${error}`);
+            log(`An error occured registering Service Wroker: ${error}`);
         });
+
+        let refreshing = false;
+
+        window.navigator.serviceWorker.oncontrollerchange = () => {
+            if (!refreshing) {
+                log('Reload page');
+                window.location.reload();
+                refreshing = true;
+            }
+        };
     } else {
-        debug.log('Service Worker is not available; falling back to app cache');
+        log('Service Worker is not available; falling back to app cache');
         window.addEventListener('load', () => {
             window.applicationCache.addEventListener('updateready', () => {
                 if (window.applicationCache.status === window.applicationCache.UPDATEREADY) {
@@ -39,6 +61,26 @@ export function initialize(/* appInstance */) {
 }
 
 export default {
+
     name: 'sw-registration',
-    initialize
+
+    initialize,
+
+    trackInstalling(worker) {
+        'use strict';
+
+        return new Promise((resolve) => {
+            worker.onstatechange = () => {
+                if (worker.state === 'installed') {
+                    resolve(worker);
+                }
+            };
+        });
+    },
+
+    updateReady(worker, notifyService) {
+        'use strict';
+        notifyService.set('isUpdateReady', true);
+        notifyService.set('waitingWorker', worker);
+    }
 };

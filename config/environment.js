@@ -47,8 +47,9 @@ module.exports = function(environment) {
         enabled: true,
         debug: true,
         includeRegistration: false,
+        skipWaiting: false,
         swIncludeFiles: [
-            'node_modules/pouchdb/dist/pouchdb.js'
+            // 'node_modules/pouchdb/dist/pouchdb.js'
         ],
     };
 
