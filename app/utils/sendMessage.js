@@ -1,5 +1,7 @@
+import RSVP from 'rsvp';
+
 export function sendMessage(message) {
-    return new Promise((resolve, reject) => {
+    return new RSVP.Promise((resolve, reject) => {
         let messageChannel = new MessageChannel();
 
         messageChannel.port1.onmessage = (event) => {

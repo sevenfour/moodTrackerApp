@@ -11,11 +11,6 @@ module.exports = {
     env: {
         browser: true
     },
-    globals: {
-        '$': true,
-        'debug': true,
-        'Promise': true
-    },
     rules: {
         'indent': 'off',
         'one-var': ["error", { var: "always", let: "never", const: "never" }],

@@ -25,9 +25,15 @@ export default Component.extend({
         reload() {
             'use strict';
 
-            this.get('notify.waitingWorker').postMessage({
-                action: 'skipWaiting'
-            });
+            const worker = this.get('notify.waitingWorker');
+
+            if (worker.state !== 'redundant') {
+                worker.postMessage({
+                    action: 'skipWaiting'
+                });
+            } else {
+                window.location.reload();
+            }
         }
 
     }

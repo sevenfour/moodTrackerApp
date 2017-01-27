@@ -1,4 +1,5 @@
 import debug from 'ember-debug';
+import RSVP from 'rsvp';
 
 const { log } = debug;
 
@@ -69,7 +70,7 @@ export default {
     trackInstalling(worker) {
         'use strict';
 
-        return new Promise((resolve) => {
+        return new RSVP.Promise((resolve) => {
             worker.onstatechange = () => {
                 if (worker.state === 'installed') {
                     resolve(worker);
