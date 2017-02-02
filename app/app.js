@@ -4,16 +4,16 @@ import Resolver from './resolver';
 import loadInitializers from 'ember-load-initializers';
 import config from './config/environment';
 
-let App;
+let moorTrackerApp;
 
 Ember.MODEL_FACTORY_INJECTIONS = true;
 
-App = Application.extend({
+moorTrackerApp = Application.extend({
     modulePrefix: config.modulePrefix,
     podModulePrefix: config.podModulePrefix,
     Resolver
 });
 
-loadInitializers(App, config.modulePrefix);
+loadInitializers(moorTrackerApp, config.modulePrefix);
 
-export default App;
+export default moorTrackerApp;

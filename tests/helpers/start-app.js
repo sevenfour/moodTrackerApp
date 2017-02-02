@@ -1,19 +1,19 @@
 import assign from 'ember-platform';
-import run from 'ember-debug';
+import run from 'ember-runloop';
 import Application from '../../app';
 import config from '../../config/environment';
 
 export default function startApp(attrs) {
-  let application;
+    let application;
 
-  // use defaults, but you can override
-  let attributes = assign({}, config.APP, attrs);
+    let attributes = assign({}, config.APP);
+    attributes = assign(attributes, attrs); // use defaults, but you can override;
 
-  run(() => {
-    application = Application.create(attributes);
-    application.setupForTesting();
-    application.injectTestHelpers();
-  });
+    run(() => {
+      application = Application.create(attributes);
+      application.setupForTesting();
+      application.injectTestHelpers();
+    });
 
-  return application;
+    return application;
 }

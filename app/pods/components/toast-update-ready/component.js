@@ -1,8 +1,6 @@
 import Component from 'ember-component';
 import service from 'ember-service/inject';
-import computed from 'ember-computed';
-
-const { alias } = computed;
+import { alias } from 'ember-computed';
 
 export default Component.extend({
 
