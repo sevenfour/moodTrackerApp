@@ -1,13 +1,16 @@
+<input type="checkbox" id="drawer-toggle" name="drawer-toggle">
+<label for="drawer-toggle" class="drawer-toggle-label">
+    <span class="sr-only">{{t 'appHeader.toggleNav'}}</span>
+    {{inline-svg 'icon-menu-mobile' class='icon-sandwich'}}
+</label>
 {{app-header
-    imgSource='logo'
+    imgSource='logo'}}
+{{drawer-menu
     firstName=model.user.firstName
-    nickname=model.user.nickname
-    currentPath=currentPath
-    switchLanguage='switchLanguage'
-    logout='doLogout'}}
-<div class="container-fluid no-padding-left-right">
+    switchLanguage=(route-action 'switchLanguage')
+    logout=(route-action 'doLogout')}}
+<div class="page-content">
     {{outlet}}
     {{toast-update-ready
-        class='col-xs-12 col-sm-4 col-md-4'
         message='New version available'}}
 </div>

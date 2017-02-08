@@ -8,12 +8,10 @@ moduleForComponent('app-header', 'Integration | Component | app header', {
 test('it renders', function(assert) {
     'use strict';
 
-    this.set('firstName', 'Salomon');
     this.set('imgSource', 'logo');
 
     this.render(hbs`{{app-header
-        firstName=firstName
         imgSource=imgSource}}`);
 
-    assert.ok(this.$('.userName').text().indexOf('Salomon') > -1);
+    assert.ok(this.$('svg').hasClass('starling-logo'));
 });

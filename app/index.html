@@ -23,9 +23,11 @@
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-status-bar-style" content="default">
 
+        <link rel="stylesheet" href="{{rootURL}}assets/moodtracker.css">
+
         {{content-for "head"}}
 
-        <link rel="stylesheet" href="{{rootURL}}assets/moodtracker.css">
+        {{content-for 'app-shell-css'}}
 
         {{content-for "head-footer"}}
     </head>

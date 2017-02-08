@@ -25,7 +25,7 @@ export default Component.extend({
 
             const worker = this.get('notify.waitingWorker');
 
-            if (worker.state !== 'redundant') {
+            if (worker && worker.state !== 'redundant') {
                 worker.postMessage({
                     action: 'skipWaiting'
                 });

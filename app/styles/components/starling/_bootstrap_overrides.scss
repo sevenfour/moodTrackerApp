@@ -60,7 +60,7 @@ input[ type = 'checkbox' ] {
     padding-right: 0;
     padding-left: 0;
 }
-// dsfkldsfklj
+
 .btn-custom,
 .btn-custom-filled,
 .btn-discouraged,
@@ -87,15 +87,6 @@ input[ type = 'checkbox' ] {
 .btn-discouraged {
     border-color: $ink-navy;
     color: $ink-navy;
-}
-
-.btn-primary-second {
-    padding: 0 3.25em;
-
-    @media ( max-width: $screen-xs-max ) {
-        padding-right: 2.25em;
-        padding-left: 2.25em;
-    }
 }
 
 .btn-functionality {
@@ -169,9 +160,7 @@ fieldset[ disabled ] .btn-custom:hover,
 fieldset[ disabled ] .btn-custom:focus,
 fieldset[ disabled ] .btn-custom:active,
 fieldset[ disabled ] .btn-custom.active {
-    $opacity: 30;
-
-    @include opacity($opacity);
+    opacity: 30;
 }
 
 .btn-custom-filled.disabled:hover,
@@ -187,9 +176,7 @@ fieldset[ disabled ] .btn-custom-filled:hover,
 fieldset[ disabled ] .btn-custom-filled:focus,
 fieldset[ disabled ] .btn-custom-filled:active,
 fieldset[ disabled ] .btn-custom-filled.active {
-    $opacity: 30;
-
-    @include opacity($opacity);
+    opacity: 30;
 }
 
 .btn-functionality:hover,
@@ -243,9 +230,7 @@ fieldset[ disabled ] .btn-no:active,
 fieldset[ disabled ] .btn-yes:hover,
 fieldset[ disabled ] .btn-yes:focus,
 fieldset[ disabled ] .btn-yes:active {
-    $opacity: 30;
-
-    @include opacity($opacity);
+    opacity: 30;
 }
 
 .btn-round-with-icon {
@@ -296,330 +281,13 @@ fieldset[ disabled ] .btn-yes:active {
 fieldset[ disabled ] .btn-round-with-icon:hover,
 fieldset[ disabled ] .btn-round-with-icon:focus,
 fieldset[ disabled ] .btn-round-with-icon:active {
-    $opacity: 30;
-
-    @include opacity($opacity);
+    opacity: 30;
 }
 
 /* General styles - END - ----------------------------------------------------------------------- */
 
-/* Header navigation styles - START - ----------------------------------------------------------- */
-
-.navbar-default {
-    margin-bottom: 0;
-    height: 60px;
-    filter: drop-shadow(0 3px 4px rgba(149, 152, 154, 0.5));
-
-    .starling-logo {
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        margin: auto;
-        width: 170px;
-        height: 48px;
-
-        @media ( min-width: $screen-sm-min ) {
-            transform: translateY(-1%);
-            margin-right: 0;
-            margin-left: 0;
-        }
-
-        @media ( min-width: $screen-sm-min ) and ( max-width: 800px ) {
-            left: 35px;
-        }
-
-        @media ( min-width: $screen-md-min ) {
-            left: 15px;
-        }
-
-        @media ( min-width: 1050px ) {
-            left: 5%;
-        }
-    }
-
-    .header-fr {
-        .starling-logo {
-            @media ( min-width: $screen-sm-min ) and ( max-width: 800px ) {
-                width: 152px;
-                height: 30px;
-            }
-        }
-    }
-
-    .icon-sandwich {
-        width: 26px;
-        height: 26px;
-    }
-
-    .navbar-collapse {
-        border-top: none;
-        background-color: $white;
-
-        @media ( min-width: $screen-sm-min ) {
-            background-color: transparent;
-        }
-    }
-
-    .navbar-nav.primary {
-        padding-right: 5px;
-
-        @media ( min-width: $screen-sm-min ) {
-            padding-right: 5%;
-        }
-
-        @media ( min-width: $screen-md-min ) {
-            padding-right: 10%;
-        }
-    }
-}
-
-.navbar-nav {
-    .userName,
-    .navbar-link {
-        color: $cement-grey;
-        font-family: 'Uniform Rounded Regular';
-        font-size: 18px;
-
-        &.navbar-link-fr {
-            @media ( min-width: $screen-sm-min ) and ( max-width: 1200px ) {
-                font-size: 14px;
-            }
-        }
-    }
-
-    .navbar-item {
-        padding-left: 15px;
-
-        .navbar-link {
-            margin: 0;
-            padding: 0;
-            line-height: 60px;
-            color: $cement-grey;
-
-            @media ( min-width: $screen-sm-min ) and ( max-width: 815px ) {
-                margin-right: 5px;
-                margin-left: 5px;
-            }
-
-            @media ( min-width: 816px ) and ( max-width: 850px ) {
-                margin-right: 10px;
-                margin-left: 10px;
-            }
-
-            @media ( min-width: 851px ) {
-                margin-right: 15px;
-                margin-left: 15px;
-            }
-
-            @media ( min-width: $screen-md-min ) and ( max-width: 1100px ) {
-                margin-right: 25px;
-                margin-left: 25px;
-            }
-
-            @media ( min-width: 1101px ) {
-                margin-right: 30px;
-                margin-left: 30px;
-            }
-
-            @media ( min-width: 1150px ) {
-                margin-right: 35px;
-                margin-left: 35px;
-            }
-
-            &.active {
-                color: $true-blue;
-            }
-
-            &.active:focus,
-            &.active:active,
-            &.active:hover {
-                color: $sky-blue;
-            }
-
-            &.disabled {
-                color: $cloudy-navy;
-            }
-        }
-
-        @media ( min-width: $screen-sm-min ) {
-            padding-left: 0;
-        }
-    }
-
-    &.navbar-nav-fr {
-        .userName,
-        .navbar-link {
-            line-height: 65px;
-            font-size: 13px;
-
-            @media ( min-width: $screen-sm-min ) and ( max-width: 850px ) {
-                margin-right: 5px;
-                margin-left: 5px;
-            }
-
-            @media ( min-width: 851px ) {
-                margin-right: 10px;
-                margin-left: 10px;
-            }
-
-            @media ( min-width: 900px ) {
-                font-size: 14px;
-            }
-
-            @media ( min-width: $screen-md-min ) and ( max-width: 1100px ) {
-                margin-right: 15px;
-                margin-left: 15px;
-            }
-
-            @media ( min-width: 1101px ) {
-                margin-right: 20px;
-                margin-left: 20px;
-            }
-
-            @media ( min-width: 1150px ) {
-                margin-right: 25px;
-                margin-left: 25px;
-            }
-
-            @media ( min-width: 1250px ) {
-                font-size: 16px;
-            }
-        }
-    }
-
-    .icon-caret {
-        margin-left: 15px;
-        width: 25px;
-        height: 25px;
-
-        .icon-caret-path {
-            transform: translateY(40%);
-            fill: $cement-grey;
-        }
-    }
-
-    .dropdown-toggle {
-        border: none;
-        background: transparent;
-        padding: 0;
-        line-height: 60px;
-        color: $cement-grey;
-
-        @media ( max-width: $screen-xs-max ) {
-            margin-left: 15px;
-            padding-left: 0;
-        }
-
-        @media ( min-width: $screen-sm-min ) {
-            margin-left: 15px;
-        }
-
-        @media ( min-width: $screen-md-min ) {
-            margin-left: 45px;
-        }
-
-        &:hover {
-            .userName {
-                color: $true-blue;
-            }
-
-            .icon-caret {
-                > path {
-                    fill: $true-blue;
-                }
-            }
-        }
-    }
-
-    .dropdown-menu {
-        margin-top: 0;
-        border-radius: 5px;
-        border-color: $cloudy-navy;
-        padding: 5px 15px;
-        min-width: 12.5em;
-        filter: drop-shadow(0 1px 3px rgba(198, 198, 198, 0.5));
-
-        .dropdown-menu-item:last-child {
-            margin-bottom: 5px;
-        }
-    }
-
-    .dropdown {
-        @media ( min-width: $screen-sm-min ) {
-            .dropdown-menu {
-                display: block;
-                transition: all 350ms ease;
-                opacity: 0;
-                max-height: 0;
-                overflow: hidden;
-            }
-
-            &.open {
-                .dropdown-menu {
-                    opacity: 1;
-                    max-height: 300px;
-                }
-            }
-        }
-    }
-
-    .starling-id-title {
-        display: block;
-        margin-top: 10px;
-        color: $cement-grey;
-        font-size: $font-size-small;
-    }
-
-    .divider {
-        margin: 10px 0;
-        color: $cloudy-navy;
-    }
-
-    .starlingId,
-    .menu-item-btn {
-        padding: 0;
-        font-weight: 300;
-    }
-
-    .starlingId {
-        display: block;
-        margin-top: 10px;
-        padding: 3px 0;
-    }
-
-    .menu-item-btn {
-        border: none;
-        background-color: transparent;
-        color: $text-color;
-
-        &:hover {
-            color: $true-blue;
-        }
-    }
-}
-
-/* Header navigation styles - END - ------------------------------------------------------------- */
-
 /* Starling Minds Mood Tracker app core styles - END - ------------------------------------------ */
 
 /* Starling Minds Mood Tracker components styles - START - -------------------------------------- */
-
-.toast-update-ready {
-    position: absolute;
-    top: 4.779em;
-    visibility: hidden;
-    background-color: $bright-green;
-
-    &.update-ready {
-        visibility: visible;
-    }
-
-    .message-text {
-        color: $cement-grey;
-        font-family: 'Uniform Rounded Regular';
-    }
-}
 
 /* Starling Minds Mood Tracker components styles - END - ---------------------------------------- */

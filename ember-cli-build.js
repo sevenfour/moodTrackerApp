@@ -6,7 +6,8 @@ module.exports = function(defaults) {
         outputPaths: {
             app: {
                 css: {
-                  'app': '/assets/moodtracker.css'
+                    'app': '/assets/moodtracker.css',
+                    'appshell': '/assets/appshell.css'
                 },
                 js: '/assets/moodtracker.js'
             }
@@ -27,6 +28,7 @@ module.exports = function(defaults) {
 
         // ember-cli-inline-content
         inlineContent: {
+            'app-shell-css': './dist/assets/appshell.css'
         }
     });
 
@@ -44,10 +46,10 @@ module.exports = function(defaults) {
     // along with the exports of each module as its value.
 
     // Load Bootstrap JS libraries
-    app.import('bower_components/bootstrap/js/collapse.js');
-    app.import('bower_components/bootstrap/js/dropdown.js');
-    app.import('bower_components/bootstrap/js/modal.js');
-    app.import('bower_components/bootstrap/js/transition.js');
+    // app.import('bower_components/bootstrap/js/collapse.js');
+    // app.import('bower_components/bootstrap/js/dropdown.js');
+    // app.import('bower_components/bootstrap/js/modal.js');
+    // app.import('bower_components/bootstrap/js/transition.js');
 
     return app.toTree();
 };

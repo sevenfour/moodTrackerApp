@@ -1,8 +1,11 @@
 import Route from 'ember-route';
 import Object from 'ember-object';
 import RSVP from 'rsvp';
+import service from 'ember-service/inject';
 
 export default Route.extend({
+
+    fastboot: service(),
 
     language: 'default',
 
@@ -32,8 +35,13 @@ export default Route.extend({
       if (userLang) {
           this.set('i18n.locale', userLang);
       }
+  },
 
-      document.title = this.get('i18n').t('document.title');
+  // Sets document's title (fastboot provided)
+  title() {
+      'use strict';
+
+      return this.get('i18n').t('document.title');
   },
 
   saveUserData(data) {

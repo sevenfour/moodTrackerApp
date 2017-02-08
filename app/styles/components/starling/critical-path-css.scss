@@ -1,0 +1,176 @@
+
+/* CSS required for the app shell - START - ----------------------------------------------------- */
+html,
+body {
+    height: 100%;
+    overflow: hidden;
+}
+
+body {
+    margin: 0;
+}
+
+header,
+.drawer-toggle-label,
+.drawer-menu {
+    transition: left 250ms ease-in-out;
+}
+
+.drawer-toggle-label {
+    position: fixed;
+    left: 0;
+    z-index: 1;
+    cursor: pointer;
+    user-select: none;
+
+    .icon-sandwich {
+        position: absolute;
+        top: 12.5px;
+        z-index: 1;
+        margin-left: 10px;
+        width: 25px;
+        height: 25px;
+    }
+}
+
+.sr-only {
+    position: absolute;
+    margin: -1px;
+    border: 0;
+    padding: 0;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+}
+
+.app-header {
+    position: fixed;
+    left: 0;
+    z-index: 0;
+    padding: 10px 0;
+    width: 100%;
+    text-align: center;
+
+    .starling-logo {
+        width: 152px;
+        height: 30px;
+
+        .cls-1 {
+            fill: $true-blue;
+        }
+    }
+}
+
+.drawer-menu {
+    position: fixed;
+    top: 0;
+    left: -200px;
+    background-color: $ink-navy;
+    padding: 0;
+    width: 200px;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+
+    .navbar-drawer-list {
+        padding: 0 10px 0 25px;
+        list-style: none;
+    }
+
+    .navbar-drawer-item {
+        display: block;
+        position: relative;
+    }
+
+    .navbar-link {
+        text-decoration: none;
+        line-height: 3.125em;
+        color: $cement-grey;
+        font-size: 16px;
+
+        &.active {
+            color: $true-blue;
+        }
+    }
+
+    .navbar-btn {
+        border: none;
+        background-color: transparent;
+        padding: 0;
+        line-height: 2.125em;
+        color: $ash-grey;
+        font-size: 14px;
+    }
+
+    .divider {
+        margin: 10px 0;
+        background-color: $cloudy-navy;
+        height: 1px;
+        overflow: hidden;
+    }
+}
+
+.page-content {
+    position: absolute;
+    top: 50px;
+    transition: margin-left 250ms ease-in-out;
+    margin-left: 0;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+}
+
+#drawer-toggle {
+    position: absolute;
+    opacity: 0;
+
+    &:checked {
+        ~ .drawer-toggle-label {
+            opacity: 0.8;
+            background: $white;
+            width: calc(100% - 200px);
+            height: 100%;
+        }
+
+        ~ header,
+        ~ .drawer-toggle-label {
+            left: 200px;
+            transition: left 250ms ease-in-out;
+        }
+
+        ~ .drawer-menu {
+            left: 0;
+            transition: left 250ms ease-in-out;
+        }
+
+        ~ .page-content {
+            transition: margin-left 250ms ease-in-out;
+            margin-left: 200px;
+        }
+    }
+}
+
+/* Update notification toast styles - START - --------------------------------------------------- */
+
+.toast-update-ready {
+    position: absolute;
+    top: 4.779em;
+    visibility: hidden;
+    background-color: $bright-green;
+
+    &.update-ready {
+        visibility: visible;
+    }
+
+    .message-text {
+        color: $cement-grey;
+    }
+}
+
+/* Update notification toast styles - END - ----------------------------------------------------- */
+
+/* CSS required for the app shell - END - ------------------------------------------------------- */
