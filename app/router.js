@@ -7,11 +7,12 @@ const appRouter = Router.extend({
 });
 
 appRouter.map(function() {
-    this.route('moods', { path: '/' }, function() {
+    this.route('moods', { path: '/moods' }, function() {
         this.route('add', { path: '/add' });
         this.route('edit', { path: '/edit/:id' });
         this.route('list', { path: '/list' });
     });
+    this.route('my-starling', { path: '/' });
 });
 
 export default appRouter;

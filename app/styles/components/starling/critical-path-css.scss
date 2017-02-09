@@ -1,5 +1,8 @@
 
-/* CSS required for the app shell - START - ----------------------------------------------------- */
+/* Starling Minds Mood Tracker app-shell CSS - START - ------------------------------------------ */
+
+/* Core styles - START - ------------------------------------------------------------------------ */
+
 html,
 body {
     height: 100%;
@@ -10,29 +13,12 @@ body {
     margin: 0;
 }
 
-header,
-.drawer-toggle-label,
-.drawer-menu {
-    transition: left 250ms ease-in-out;
+p {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
 }
 
-.drawer-toggle-label {
-    position: fixed;
-    left: 0;
-    z-index: 1;
-    cursor: pointer;
-    user-select: none;
-
-    .icon-sandwich {
-        position: absolute;
-        top: 12.5px;
-        z-index: 1;
-        margin-left: 10px;
-        width: 25px;
-        height: 25px;
-    }
-}
-
+// Utilities
 .sr-only {
     position: absolute;
     margin: -1px;
@@ -44,13 +30,222 @@ header,
     clip: rect(0, 0, 0, 0);
 }
 
+// Buttons
+.btn {
+    display: inline-block;
+    margin-bottom: 0;
+    border: 1px solid $btn-color;
+    border-radius: 25px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+    background-color: $white;
+    background-image: none;
+    cursor: pointer;
+    padding: 10px 25px;
+    vertical-align: middle;
+    text-align: center;
+    text-decoration: none;
+    line-height: 24px;
+    white-space: nowrap;
+    color: $btn-color;
+    font-family: 'Uniform Rounded Medium';
+    font-size: 20px;
+    touch-action: manipulation;
+
+    &.disabled {
+        pointer-events: auto;
+    }
+}
+
+.btn-discouraged {
+    border-color: $ink-navy;
+    color: $ink-navy;
+}
+
+.btn-functionality {
+    border-color: $true-blue;
+    padding: 0 1.667em;
+    line-height: 26px;
+    color: $true-blue;
+    font-size: 18px;
+}
+
+.btn-no,
+.btn-yes {
+    border-width: 2px;
+    padding: 0.111em 0.556em;
+    line-height: 22px;
+    font-size: 18px;
+}
+
+.btn-no {
+    border-color: $watermelon-red;
+    color: $watermelon-red;
+}
+
+.btn-yes {
+    border-color: $clear-blue;
+    color: $clear-blue;
+}
+
+.btn:hover,
+.btn:focus,
+.btn:active,
+.btn.active {
+    border-color: $btn-hover-color;
+    background-color: $btn-hover-color;
+    color: $white;
+}
+
+.btn:active,
+.btn.active {
+    box-shadow: none;
+}
+
+.btn-discouraged:hover,
+.btn-discouraged:focus,
+.btn-discouraged:active {
+    background-color: $ink-navy;
+    color: $white;
+}
+
+.btn.disabled:hover,
+.btn.disabled:focus,
+.btn.disabled:active,
+.btn.disabled.active,
+.btn[ disabled ],
+.btn[ disabled ]:hover,
+.btn[ disabled ]:focus,
+.btn[ disabled ]:active,
+.btn[ disabled ].active,
+fieldset[ disabled ] .btn:hover,
+fieldset[ disabled ] .btn:focus,
+fieldset[ disabled ] .btn:active,
+fieldset[ disabled ] .btn.active {
+    opacity: 30;
+}
+
+.btn-functionality:hover,
+.btn-functionality:focus,
+.btn-functionality:active {
+    background-color: $true-blue;
+    color: $white;
+}
+
+.btn-no:hover,
+.btn-no:focus,
+.btn-no:active {
+    background-color: $watermelon-red;
+    color: $white;
+}
+
+.btn-yes:hover,
+.btn-yes:focus,
+.btn-yes:active {
+    background-color: $clear-blue;
+    color: $white;
+}
+
+.btn-functionality.disabled:hover,
+.btn-functionality.disabled:focus,
+.btn-functionality.disabled:active,
+.btn-functionality[ disabled ],
+.btn-functionality[ disabled ]:hover,
+.btn-functionality[ disabled ]:focus,
+.btn-functionality[ disabled ]:active,
+fieldset[ disabled ] .btn-functionality:hover,
+fieldset[ disabled ] .btn-functionality:focus,
+fieldset[ disabled ] .btn-functionality:active,
+.btn-no.disabled:hover,
+.btn-no.disabled:focus,
+.btn-no.disabled:active,
+.btn-no[ disabled ],
+.btn-no[ disabled ]:hover,
+.btn-no[ disabled ]:focus,
+.btn-no[ disabled ]:active,
+fieldset[ disabled ] .btn-no:hover,
+fieldset[ disabled ] .btn-no:focus,
+fieldset[ disabled ] .btn-no:active,
+.btn-yes.disabled:hover,
+.btn-yes.disabled:focus,
+.btn-yes.disabled:active,
+.btn-yes[ disabled ],
+.btn-yes[ disabled ]:hover,
+.btn-yes[ disabled ]:focus,
+.btn-yes[ disabled ]:active,
+fieldset[ disabled ] .btn-yes:hover,
+fieldset[ disabled ] .btn-yes:focus,
+fieldset[ disabled ] .btn-yes:active {
+    opacity: 30;
+}
+
+.btn-round-with-icon {
+    position: relative;
+    border: 3px solid $ink-navy;
+    border-radius: 50%;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+    background-color: $white;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    touch-action: manipulation;
+    user-select: none;
+
+    .icon {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        margin: auto;
+
+        > path {
+            fill: $ink-navy;
+        }
+    }
+
+    &:hover,
+    &:focus,
+    &:active {
+        background-color: $ink-navy;
+
+        .icon {
+            > path {
+                fill: $white;
+            }
+        }
+    }
+}
+
+.btn-round-with-icon.disabled:hover,
+.btn-round-with-icon.disabled:focus,
+.btn-round-with-icon.disabled:active,
+.btn-round-with-icon[ disabled ],
+.btn-round-with-icon[ disabled ]:hover,
+.btn-round-with-icon[ disabled ]:focus,
+.btn-round-with-icon[ disabled ]:active,
+fieldset[ disabled ] .btn-round-with-icon:hover,
+fieldset[ disabled ] .btn-round-with-icon:focus,
+fieldset[ disabled ] .btn-round-with-icon:active {
+    opacity: 30;
+}
+
+/* Core styles - END - -------------------------------------------------------------------------- */
+
+/* Header styles - START - ---------------------------------------------------------------------- */
+
 .app-header {
     position: fixed;
+    top: 0;
+    right: 0;
     left: 0;
-    z-index: 0;
+    z-index: 1030;
     padding: 10px 0;
     width: 100%;
     text-align: center;
+
+    .starling-logo-link {
+        display: inline-block;
+    }
 
     .starling-logo {
         width: 152px;
@@ -59,6 +254,27 @@ header,
         .cls-1 {
             fill: $true-blue;
         }
+    }
+}
+
+/* Header styles - END - ------------------------------------------------------------------------ */
+
+/* Drawer-menu styles - START - ----------------------------------------------------------------- */
+
+.drawer-toggle-label {
+    position: fixed;
+    left: 0;
+    z-index: 1031;
+    cursor: pointer;
+    user-select: none;
+
+    .icon-sandwich {
+        position: absolute;
+        top: 12.5px;
+        z-index: 1031;
+        margin-left: 10px;
+        width: 25px;
+        height: 25px;
     }
 }
 
@@ -88,6 +304,7 @@ header,
         text-decoration: none;
         line-height: 3.125em;
         color: $cement-grey;
+        font-family: 'Uniform Rounded Regular';
         font-size: 16px;
 
         &.active {
@@ -101,6 +318,7 @@ header,
         padding: 0;
         line-height: 2.125em;
         color: $ash-grey;
+        font-family: 'Uniform Rounded Regular';
         font-size: 14px;
     }
 
@@ -110,6 +328,14 @@ header,
         height: 1px;
         overflow: hidden;
     }
+}
+
+/* Drawer-menu styles - END - ------------------------------------------------------------------- */
+
+.app-header,
+.drawer-toggle-label,
+.drawer-menu {
+    transition: left 250ms ease-in-out;
 }
 
 .page-content {
@@ -124,6 +350,8 @@ header,
     -webkit-overflow-scrolling: touch;
 }
 
+/* Drawer-menu transition styles - START - ------------------------------------------------------ */
+
 #drawer-toggle {
     position: absolute;
     opacity: 0;
@@ -136,7 +364,7 @@ header,
             height: 100%;
         }
 
-        ~ header,
+        ~ .app-header,
         ~ .drawer-toggle-label {
             left: 200px;
             transition: left 250ms ease-in-out;
@@ -153,6 +381,36 @@ header,
         }
     }
 }
+
+/* Drawer-menu transition styles - END - -------------------------------------------------------- */
+
+/* Medium devices (>= 992px) drawer-menu and header/page-content styles - START - --------------- */
+
+@media ( min-width: 992px ) {
+    .page-content {
+        transition: margin-left 250ms ease-in-out;
+        margin-left: 200px;
+    }
+
+    .drawer-menu {
+        left: 0;
+    }
+
+    .app-header,
+    .drawer-toggle-label {
+        left: 200px;
+    }
+
+    .app-header {
+        width: calc(100% - 200px);
+    }
+
+    .drawer-toggle-label {
+        visibility: hidden;
+    }
+}
+
+/* Medium devices (>= 992px) drawer-menu and header/page-content styles - START - --------------- */
 
 /* Update notification toast styles - START - --------------------------------------------------- */
 
@@ -173,4 +431,43 @@ header,
 
 /* Update notification toast styles - END - ----------------------------------------------------- */
 
-/* CSS required for the app shell - END - ------------------------------------------------------- */
+/* Starling Minds Mood Tracker app-shell CSS - END - -------------------------------------------- */
+
+/* App-shell related pages styles - START - ----------------------------------------------------- */
+
+.page {
+    position: relative;
+    float: left;
+    transition: width 250ms ease-in-out;
+    padding-right: 15px;
+    padding-left: 15px;
+    width: calc(100% - 30px);
+    min-height: 1px;
+    text-align: center;
+
+    @media ( min-width: 992px ) {
+        width: calc(100% - 230px);
+    }
+}
+
+.page-title {
+    line-height: 1.2em;
+    color: $true-blue;
+    font-family: 'Uniform Rounded Light';
+    font-size: 20px;
+}
+
+.my-starling-page {
+    .page-title {
+        margin: 50px 0 20px;
+    }
+
+    .route-link {
+        margin: 10px 0;
+        padding-right: 0;
+        padding-left: 0;
+        width: 240px;
+    }
+}
+
+/* App-shell related pages styles - END - ------------------------------------------------------- */

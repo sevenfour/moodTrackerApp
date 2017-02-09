@@ -16,16 +16,53 @@ export default {
 
     /* Buttons - END - -------------------------------------------------------------------------- */
 
+    /* Routes names - START - ------------------------------------------------------------------- */
+
+    'routes': {
+        'moodTracker': 'Outil de suivi de l\'humeur', // *
+        'moodHistory': 'Historique des humeurs' // *
+    },
+
+    /* Routes names - END - --------------------------------------------------------------------- */
+
     /* Components - START - --------------------------------------------------------------------- */
 
-    'appHeader': {
-        'moodTracker': 'Outil de suivi de l\'humeur', // *
-        'moodHistory': 'Historique des humeurs', // *
+    'drawerMenu': {
         'toggleNav': 'Sélecteur de navigation', // *
         'starlingID': 'Starling ID', // *
         'member': 'Membre', // *
         'logout': 'Fermeture de session' // *
-    }
+    },
 
     /* Components - END - ----------------------------------------------------------------------- */
+
+    /* Pages - START - -------------------------------------------------------------------------- */
+
+    /* My Starling page - START - --------------------------------------------------------------- */
+
+    'myStarling': {
+        'title': 'What would you like to do? - Fr -',
+        'linkToMoodTracker': 'Track a mood - Fr -',
+        'linkToMoodHistory': 'Examine your history - Fr -'
+    },
+
+    /* My Starling page - END - ----------------------------------------------------------------- */
+
+    /* Mood Tracker page - START - -------------------------------------------------------------- */
+
+    'moodTracker': {
+        'title': 'Comment vous êtes-vous senti?'
+    },
+
+    /* Mood Tracker page - END - ---------------------------------------------------------------- */
+
+    /* Mood History page - START - -------------------------------------------------------------- */
+
+    'moodHistory': {
+        'title': 'Historique des humeurs'
+    }
+
+    /* Mood History page - END - ---------------------------------------------------------------- */
+
+    /* Pages - END - ---------------------------------------------------------------------------- */
 };

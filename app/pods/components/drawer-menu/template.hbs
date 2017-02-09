@@ -1,12 +1,12 @@
 <ul class="navbar-drawer-list {{if (is-equal i18n.locale 'fr') 'fr'}}">
     <li class="navbar-drawer-item">
         {{#link-to 'moods.add' class='navbar-link'}}
-            {{t 'appHeader.moodTracker'}}
+            {{t 'routes.moodTracker'}}
         {{/link-to}}
     </li>
     <li class="navbar-drawer-item">
         {{#link-to 'moods.list' class='navbar-link'}}
-            {{t 'appHeader.moodHistory'}}
+            {{t 'routes.moodHistory'}}
         {{/link-to}}
     </li>
     <li role="separator" class="navbar-drawer-item divider"></li>
@@ -17,7 +17,7 @@
     </li>
     <li class="navbar-drawer-item">
         <button type="button" class="navbar-btn" {{action 'logout'}}>
-            {{t 'appHeader.logout'}}
+            {{t 'drawerMenu.logout'}}
         </button>
     </li>
 </ul>
