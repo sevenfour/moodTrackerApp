@@ -30,6 +30,30 @@ p {
     clip: rect(0, 0, 0, 0);
 }
 
+.control-label {
+    display: block;
+    margin-bottom: 5px;
+    text-align: left;
+    color: $ash-grey;
+    font-family: 'Uniform Rounded Regular';
+}
+
+.form-control {
+    display: block;
+    transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+    margin-bottom: 15px;
+    border: 1px solid $cloudy-navy;
+    border-radius: 4px;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    background-color: $white;
+    background-image: none;
+    padding: 6px 12px;
+    width: 100%;
+    line-height: 1.375em;
+    color: $cement-grey;
+    font-size: 16px;
+}
+
 // Buttons
 .btn {
     display: inline-block;
@@ -127,6 +151,7 @@ fieldset[ disabled ] .btn.active {
 .btn-functionality:hover,
 .btn-functionality:focus,
 .btn-functionality:active {
+    border-color: $true-blue;
     background-color: $true-blue;
     color: $white;
 }
@@ -134,6 +159,7 @@ fieldset[ disabled ] .btn.active {
 .btn-no:hover,
 .btn-no:focus,
 .btn-no:active {
+    border-color: $watermelon-red;
     background-color: $watermelon-red;
     color: $white;
 }
@@ -141,6 +167,7 @@ fieldset[ disabled ] .btn.active {
 .btn-yes:hover,
 .btn-yes:focus,
 .btn-yes:active {
+    border-color: $clear-blue;
     background-color: $clear-blue;
     color: $white;
 }
@@ -295,6 +322,12 @@ fieldset[ disabled ] .btn-round-with-icon:active {
         list-style: none;
     }
 
+    .userName {
+        margin: 0 0 15px;
+        font-family: 'Uniform Rounded Medium';
+        font-size: 18px;
+    }
+
     .navbar-drawer-item {
         display: block;
         position: relative;
@@ -314,9 +347,9 @@ fieldset[ disabled ] .btn-round-with-icon:active {
 
     .navbar-btn {
         border: none;
-        background-color: transparent;
-        padding: 0;
-        line-height: 2.125em;
+        background: transparent;
+        padding-right: 0;
+        padding-left: 0;
         color: $ash-grey;
         font-family: 'Uniform Rounded Regular';
         font-size: 14px;
@@ -390,6 +423,7 @@ fieldset[ disabled ] .btn-round-with-icon:active {
     .page-content {
         transition: margin-left 250ms ease-in-out;
         margin-left: 200px;
+        width: calc(100% - 200px);
     }
 
     .drawer-menu {
@@ -444,9 +478,60 @@ fieldset[ disabled ] .btn-round-with-icon:active {
     width: calc(100% - 30px);
     min-height: 1px;
     text-align: center;
+}
+
+.starling-logo.on-login {
+    position: absolute;
+    top: 10px;
+    right: 0;
+    left: 0;
+    margin: auto;
+    width: 152px;
+    height: 30px;
+
+    .cls-1 {
+        fill: $true-blue;
+    }
+}
+
+.login-page {
+    .error-message {
+        padding: 5px 15px;
+        background-color: #ffddd9;
+        color: #787878;
+        text-align: left;
+    }
+
+    .horizontal-form {
+        margin: 30px auto auto;
+
+        @media ( min-width: 600px ) {
+            width: 75%;
+        }
+
+        @media ( min-width: 750px ) {
+            width: 65%;
+        }
+
+        @media ( min-width: 900px ) {
+            width: 60%;
+        }
+
+        @media ( min-width: 1200px ) {
+            width: 50%;
+        }
+    }
+
+    .btn-functionality {
+        width: 100%;
+
+        @media ( min-width: 768px ) {
+            width: 35%;
+        }
+    }
 
     @media ( min-width: 992px ) {
-        width: calc(100% - 230px);
+        margin-left: -100px;
     }
 }
 

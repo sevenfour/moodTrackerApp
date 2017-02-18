@@ -48,9 +48,16 @@ module.exports = function(environment) {
         debug: true,
         includeRegistration: false,
         skipWaiting: false,
+        excludePaths: [
+            'manifest.appcache'
+        ],
         swIncludeFiles: [
             // 'node_modules/pouchdb/dist/pouchdb.js'
         ],
+    };
+
+    ENV['simple-auth'] = {
+        baseURL: '/'
     };
 
     if (environment === 'development') {

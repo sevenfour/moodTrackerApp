@@ -1,16 +1,20 @@
-<input type="checkbox" id="drawer-toggle" name="drawer-toggle">
-<label for="drawer-toggle" class="drawer-toggle-label">
-    <span class="sr-only">{{t 'drawerMenu.toggleNav'}}</span>
-    {{inline-svg 'icon-menu-mobile' class='icon-sandwich'}}
-</label>
-{{app-header
-    imgSource='logo'}}
-{{drawer-menu
-    firstName=model.user.firstName
-    switchLanguage=(route-action 'switchLanguage')
-    logout=(route-action 'doLogout')}}
+{{#if session.isAuthenticated}}
+    <input type="checkbox" id="drawer-toggle" name="drawer-toggle">
+    <label for="drawer-toggle" class="drawer-toggle-label">
+        <span class="sr-only">{{t 'drawerMenu.toggleNav'}}</span>
+        {{inline-svg 'icon-menu-mobile' class='icon-sandwich'}}
+    </label>
+    {{app-header
+        imgSource='logo'}}
+    {{drawer-menu
+        userFirstName=model.user.firstName
+        switchLanguage=(route-action 'switchLanguage')
+        logout=(route-action 'invalidateSession')}}
+{{else}}
+    {{inline-svg 'logo' class='starling-logo on-login'}}
+{{/if}}
 <div class="page-content">
-    {{liquid-outlet}}
-    {{toast-update-ready
-        message='New version available'}}
+    {{outlet}}
 </div>
+{{toast-update-ready
+    message='New version available'}}

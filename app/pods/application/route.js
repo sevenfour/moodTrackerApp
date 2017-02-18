@@ -1,39 +1,61 @@
 import Route from 'ember-route';
-import Object from 'ember-object';
 import RSVP from 'rsvp';
 import service from 'ember-service/inject';
+import set from 'ember-metal/set';
+import { alias } from 'ember-computed';
+import fetch from 'ember-network/fetch';
+import ApplicationRouteMixin from 'ember-simple-auth/mixins/application-route-mixin';
 
-export default Route.extend({
+export default Route.extend(ApplicationRouteMixin, {
+
+    session: service(),
 
     fastboot: service(),
 
     language: 'default',
 
-    model() {
+    routeAfterAuthentication: 'my-starling',
+
+    isAuthenticated: alias('session.isAuthenticated'),
+
+    model(params, transition) {
         'use strict';
 
-        return RSVP.hash({
-            user: Object.create({
-                firstName: 'Salomon',
-                lastName: 'Salomonder',
-                email: 'salomonder@g.com',
-                nickname: '123',
-                locale: Object.create({
-                    language: 'en',
-                    region: null
+        let user = null;
+
+        if (this.get('isAuthenticated')) {
+            return fetch('/api/users/id', {
+                method: 'GET',
+                headers: {
+                  'Authorization': `Basic ${this.get('session.data.authenticated.token')}`
+                }
                 })
-            }),
-            language: this.language
+                .then((response) => {
+                    if (response.ok) {
+                        return response.json();
+                    } else if (response.status === 403) {
+                        transition.send('invalidateSession');
+                    }
+                })
+                .then((result) => {
+                    user = result;
+                });
+        }
+
+        return RSVP.hash({
+            user
         });
     },
 
   afterModel(model) {
       'use strict';
 
-      const userLang = model.user.get('locale.language');
+      if (this.get('isAuthenticated') && model) {
+          const userLang = model.user.get('locale.language');
 
-      if (userLang) {
-          this.set('i18n.locale', userLang);
+          if (userLang) {
+              this.set('i18n.locale', userLang);
+          }
       }
   },
 
@@ -79,31 +101,42 @@ export default Route.extend({
           });
       },
 
+      authenticate(credentials) {
+          'use strict';
+
+          return new RSVP.Promise((resolve, reject) => {
+              this.get('session').authenticate('authenticator:custom', credentials)
+                  .then(() => {
+                      let user = this.get('session.data.authenticated.user');
+
+                      this.get('store').createRecord('user', user);
+
+                      set(this.currentModel, 'user', user);
+                  })
+                  .catch((reason) => {
+                      reject(reason);
+                  });
+          });
+      },
+
+      invalidateSession() {
+          'use strict';
+
+          this.get('session').invalidate();
+      },
+
       error(error, transition) {
           'use strict';
+
+          this._super(...arguments);
+
           // handle the error
           // eslint-disable-next-line no-console
           console.log(`${error.message} in transition to "${transition.targetName}"`); // NOSONAR
           // eslint-disable-next-line no-console
-          console.log(error.stack); // NOSONAR
+          console.log(`${error.stack}`); // NOSONAR
 
           return true;
-      },
-
-      /*
-      * This is the wrapper function to perform various app logic
-      * before the actual logout.
-      */
-      doLogout() {
-          'use strict';
-
-          this.send('logout');
-      },
-
-      logout() {
-          'use strict';
-
-          window.location = '/';
       }
   }
 });

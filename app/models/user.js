@@ -1,11 +1,8 @@
 import DS from 'ember-data';
 
-const { Model, attr, belongsTo } = DS;
+const { Model, attr } = DS;
 
 export default Model.extend({
     firstName: attr('string'),
-    lastName: attr('string'),
-    email: attr('string'),
-    nickname: attr('string'),
-    locale: belongsTo('locale', { async: false })
+    lastName: attr('string')
 });

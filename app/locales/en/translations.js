@@ -16,9 +16,15 @@ export default {
         'worried': 'Worried'
     },
 
+    'serverError': {
+        'unauthorized': 'Sign in details are not correct. Please try again.',
+        'runtime.error': 'There was a problem processing your request. Please try again later.'
+    },
+
     /* Buttons - START - ------------------------------------------------------------------------ */
 
     'btns': {
+        'login': 'Login',
         'dismiss': 'Dismiss',
         'reload': 'Reload'
     },
@@ -46,6 +52,15 @@ export default {
     /* Components - END - ----------------------------------------------------------------------- */
 
     /* Pages - START - -------------------------------------------------------------------------- */
+
+    /* Login page - START - --------------------------------------------------------------------- */
+
+    'login': {
+        'emailTitle': 'Email',
+        'passwordTitle': 'Password'
+    },
+
+    /* Login page - END - ----------------------------------------------------------------------- */
 
     /* My Starling page - START - --------------------------------------------------------------- */
 

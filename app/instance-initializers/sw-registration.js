@@ -50,7 +50,7 @@ export function initialize(appInstance) {
                     refreshing = true;
                 }
             };
-        } else {
+        } else if ('applicationCache' in window) {
             log('Service Worker is not available; falling back to app cache');
             window.addEventListener('load', () => {
                 window.applicationCache.addEventListener('updateready', () => {

@@ -7,9 +7,25 @@ export default {
         'sadness': 'La tristesse' // *
     },
 
+    'emotions': {
+        'happy': 'Joyeux', // *
+        'sad': 'Triste', // *
+        'relaxed': 'Détendu', // *
+        'anxious': 'Anxieux', // *
+        'calm': 'Calme',
+        'worried': 'Inquiet' // *
+    },
+
+    'serverError': {
+        'unauthorized': 'Les données d’ouverture de session sont incorrectes. Veuillez réessayer.',
+        'runtime.error': `Un problème est survenu dans le traitement de votre requête.
+            Veuillez réessayer plus tard.` // *
+    },
+
     /* Buttons - START - ------------------------------------------------------------------------ */
 
     'btns': {
+        'login': 'Ouvrir une session', // *
         'dismiss': 'Dismiss - Fr -',
         'reload': 'Reload - Fr -'
     },
@@ -37,6 +53,15 @@ export default {
     /* Components - END - ----------------------------------------------------------------------- */
 
     /* Pages - START - -------------------------------------------------------------------------- */
+
+    /* Login page - START - --------------------------------------------------------------------- */
+
+    'login': {
+        'emailTitle': 'Adresse courriel', // *
+        'passwordTitle': 'Mot de passe' // *
+    },
+
+    /* Login page - END - ----------------------------------------------------------------------- */
 
     /* My Starling page - START - --------------------------------------------------------------- */
 

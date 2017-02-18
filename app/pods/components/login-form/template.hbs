@@ -1,0 +1,23 @@
+{{#if showErrorMessage}}
+    <p class="error-message">
+        {{t errorMessage}}
+    </p>
+{{/if}}
+<div class="form-group">
+    <label for="identification" class="control-label">{{t 'login.emailTitle'}}</label>
+    {{input
+        id='identification'
+        class='form-control'
+        value=identification
+        placeholder='Username'}}
+</div>
+<div class="form-group">
+    <label for="password" class="control-label">{{t 'login.passwordTitle'}}</label>
+    {{input
+        id='password'
+        class='form-control'
+        value=password
+        placeholder='Password'
+        type='password'}}
+</div>
+<button type="submit" class="btn btn-functionality">{{t 'btns.login'}}</button>

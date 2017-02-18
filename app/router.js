@@ -7,6 +7,7 @@ const appRouter = Router.extend({
 });
 
 appRouter.map(function() {
+    this.route('login', { path: '/login' });
     this.route('moods', { path: '/moods' }, function() {
         this.route('add', { path: '/add' });
         this.route('edit', { path: '/edit/:id' });
