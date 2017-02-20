@@ -60,7 +60,9 @@ p {
     margin-bottom: 0;
     border: 1px solid $btn-color;
     border-radius: 25px;
+    /* stylelint-disable no-indistinguishable-colors */
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+    /* stylelint-enable no-indistinguishable-colors */
     background-color: $white;
     background-image: none;
     cursor: pointer;
@@ -140,11 +142,7 @@ p {
 .btn[ disabled ]:hover,
 .btn[ disabled ]:focus,
 .btn[ disabled ]:active,
-.btn[ disabled ].active,
-fieldset[ disabled ] .btn:hover,
-fieldset[ disabled ] .btn:focus,
-fieldset[ disabled ] .btn:active,
-fieldset[ disabled ] .btn.active {
+.btn[ disabled ].active {
     opacity: 30;
 }
 
@@ -179,9 +177,6 @@ fieldset[ disabled ] .btn.active {
 .btn-functionality[ disabled ]:hover,
 .btn-functionality[ disabled ]:focus,
 .btn-functionality[ disabled ]:active,
-fieldset[ disabled ] .btn-functionality:hover,
-fieldset[ disabled ] .btn-functionality:focus,
-fieldset[ disabled ] .btn-functionality:active,
 .btn-no.disabled:hover,
 .btn-no.disabled:focus,
 .btn-no.disabled:active,
@@ -189,19 +184,13 @@ fieldset[ disabled ] .btn-functionality:active,
 .btn-no[ disabled ]:hover,
 .btn-no[ disabled ]:focus,
 .btn-no[ disabled ]:active,
-fieldset[ disabled ] .btn-no:hover,
-fieldset[ disabled ] .btn-no:focus,
-fieldset[ disabled ] .btn-no:active,
 .btn-yes.disabled:hover,
 .btn-yes.disabled:focus,
 .btn-yes.disabled:active,
 .btn-yes[ disabled ],
 .btn-yes[ disabled ]:hover,
 .btn-yes[ disabled ]:focus,
-.btn-yes[ disabled ]:active,
-fieldset[ disabled ] .btn-yes:hover,
-fieldset[ disabled ] .btn-yes:focus,
-fieldset[ disabled ] .btn-yes:active {
+.btn-yes[ disabled ]:active {
     opacity: 30;
 }
 
@@ -209,7 +198,9 @@ fieldset[ disabled ] .btn-yes:active {
     position: relative;
     border: 3px solid $ink-navy;
     border-radius: 50%;
+    /* stylelint-disable no-indistinguishable-colors */
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+    /* stylelint-enable no-indistinguishable-colors */
     background-color: $white;
     cursor: pointer;
     width: 40px;
@@ -249,10 +240,7 @@ fieldset[ disabled ] .btn-yes:active {
 .btn-round-with-icon[ disabled ],
 .btn-round-with-icon[ disabled ]:hover,
 .btn-round-with-icon[ disabled ]:focus,
-.btn-round-with-icon[ disabled ]:active,
-fieldset[ disabled ] .btn-round-with-icon:hover,
-fieldset[ disabled ] .btn-round-with-icon:focus,
-fieldset[ disabled ] .btn-round-with-icon:active {
+.btn-round-with-icon[ disabled ]:active {
     opacity: 30;
 }
 
@@ -446,6 +434,8 @@ fieldset[ disabled ] .btn-round-with-icon:active {
 
 /* Medium devices (>= 992px) drawer-menu and header/page-content styles - START - --------------- */
 
+/* Login form styles - END - -------------------------------------------------------------------- */
+
 /* Update notification toast styles - START - --------------------------------------------------- */
 
 .toast-update-ready {
@@ -496,10 +486,10 @@ fieldset[ disabled ] .btn-round-with-icon:active {
 
 .login-page {
     .error-message {
-        padding: 5px 15px;
         background-color: #ffddd9;
-        color: #787878;
+        padding: 5px 15px;
         text-align: left;
+        color: $cement-grey;
     }
 
     .horizontal-form {
