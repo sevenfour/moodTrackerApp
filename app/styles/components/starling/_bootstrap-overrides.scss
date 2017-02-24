@@ -1,0 +1,245 @@
+/* vendor.css - START - ------------------------------------------------------------------------- */
+
+.liquid-container {
+    position: relative;
+
+    /* without this, overflow:hidden won't take effect because the things
+       we're trying to hide are on a separate accelerated
+       context. Also, this prevents a tiny vertical jump when the
+       content switches to accelerated.  */
+    transform: translateY(0);
+    overflow: hidden;
+}
+
+.liquid-child {
+    overflow: hidden; /* Prevent margin collapse */
+}
+
+/* vendor.css - END - --------------------------------------------------------------------------- */
+
+/* Starling Minds Mood Tracker app core styles - START - ---------------------------------------- */
+
+[ data-ember-action ]:not( :disabled ) {
+    cursor: pointer;
+}
+
+.no-padding-left {
+    padding-left: 0;
+}
+
+.no-padding-right {
+    padding-right: 0;
+}
+
+.no-padding-left-right {
+    padding-right: 0;
+    padding-left: 0;
+}
+
+.textarea {
+    border: 1px solid $ink-navy;
+    border-radius: 5px;
+    padding: 5px 8px;
+    width: 100%;
+    max-width: 100%;
+    height: 90px;
+    max-height: 150px;
+    line-height: 1.214em;
+    color: $cloudy-navy;
+    font-family: 'Open Sans';
+}
+
+.charsCount {
+    letter-spacing: 0.05em;
+    color: $cloudy-navy;
+    font-size: $font-size-small;
+}
+
+.text-danger {
+    color: $pastel-red;
+}
+
+/* Starling Minds Mood Tracker app core styles - END - ------------------------------------------ */
+
+/* Components styles - START - ------------------------------------------------------------------ */
+
+.mood-value-input {
+    $value-holder-height: 24px;
+
+    .mood-label {
+        margin-bottom: 3px;
+        font-family: 'Uniform Rounded Regular';
+        font-size: $font-size-small;
+
+        &.sadness {
+            color: $berry-blue;
+        }
+
+        &.anxiety {
+            color: $fanta-purple;
+        }
+
+        &.worry {
+            color: $avocado-green;
+        }
+    }
+
+    .mood-values-holder {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+    }
+
+    .mood-value-label {
+        @include square($value-holder-height);
+
+        display: inline-block;
+        border: 1px solid $bubble-gum-grape;
+        border-radius: 5px;
+        cursor: pointer;
+        line-height: $value-holder-height;
+        color: $bubble-gum-grape;
+        font-family: 'Uniform Rounded Regular';
+        font-size: 16px;
+
+        &.negative {
+            background-color: $light-grape;
+        }
+
+        &.positive {
+            background-color: $white;
+        }
+    }
+
+    .mood-value-radio {
+        position: absolute;
+        left: -9999px;
+
+        &:checked {
+            + .mood-value-label {
+                background-color: $bubble-gum-grape;
+                color: $white;
+            }
+        }
+    }
+}
+
+/* Components styles - END - -------------------------------------------------------------------- */
+
+/* Pages styles - START - ----------------------------------------------------------------------- */
+
+.mood-tracker-page,
+.mood-history-page {
+    .page-section-title {
+        margin: 20px 0 10px;
+    }
+
+    .icon {
+        $size: 15px;
+
+        @include square($size);
+
+        > path {
+            fill: $true-blue !important;
+        }
+    }
+
+    .error-holder {
+        width: 100% !important;
+    }
+
+    .btn-holder {
+        margin-top: 35px;
+        padding-bottom: 5px;
+    }
+
+    .btn {
+        width: 90px;
+    }
+
+    .btn-discouraged {
+        margin-right: 40px;
+    }
+}
+
+.mood-tracker-page {
+    .menu-title-btn-holder {
+        margin-top: -10px;
+    }
+
+    .btn-round-with-icon {
+        border-width: 1px;
+        border-color: $true-blue;
+
+        &.btn-triggers {
+            background-color: $ice-blue;
+        }
+
+        &.btn-stressors {
+            background-color: $gum-grape;
+        }
+    }
+
+    .triggers-selection-list {
+        background-color: $ice-blue;
+    }
+
+    .stressors-selection-list {
+        background-color: $gum-grape;
+    }
+
+    .triggers-selection-list,
+    .stressors-selection-list {
+        margin-top: 10px;
+        padding: 15px;
+    }
+
+    .no-selection-title {
+        display: block;
+        color: $cement-grey;
+        font-family: 'Uniform Rounded Regular';
+        font-size: $font-size-small;
+    }
+
+    .date-picker-holder,
+    .time-picker-holder {
+        margin-top: 5px;
+        margin-bottom: 7px;
+    }
+
+    .date,
+    .time {
+        cursor: pointer;
+        width: 85%;
+        line-height: 17px;
+        color: $cement-grey;
+        font-family: 'Uniform Rounded Light';
+    }
+
+    .time {
+        padding-right: 30px;
+        width: 80%;
+        text-align: right;
+    }
+
+    .caret-icon {
+        position: absolute;
+        top: 0;
+        right: 25%;
+        bottom: 0;
+        margin: auto 0;
+        width: 21px;
+        height: 20px;
+        pointer-events: none;
+
+        &.caret-time-icon {
+            right: 0;
+        }
+
+        > path {
+            fill: $cement-grey;
+        }
+    }
+}
+
+/* Pages styles - END - ------------------------------------------------------------------------- */

@@ -51,5 +51,11 @@ module.exports = function(defaults) {
     // app.import('bower_components/bootstrap/js/modal.js');
     // app.import('bower_components/bootstrap/js/transition.js');
 
+    // Load Pickadate libraries
+    app.import('bower_components/pickadate/lib/legacy.js');
+    app.import('bower_components/pickadate/lib/picker.js');
+    app.import('bower_components/pickadate/lib/picker.date.js');
+    app.import('bower_components/pickadate/lib/picker.time.js');
+
     return app.toTree();
 };

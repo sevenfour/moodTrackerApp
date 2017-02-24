@@ -11,7 +11,10 @@ module.exports = {
     'rules': {
         'sh-waqar/declaration-use-variable': 'color',
 
-        'scss/at-import-partial-extension-whitelist': [''],
+        'scss/at-import-partial-extension-whitelist': [
+            'date',
+            'time'
+        ],
         'scss/at-import-no-partial-leading-underscore': true,
         'scss/at-extend-no-missing-placeholder': true,
         'scss/dollar-variable-colon-space-after': 'always',
@@ -120,7 +123,7 @@ module.exports = {
         'at-rule-name-case': 'lower',
         'at-rule-name-space-after': 'always',
         'at-rule-no-unknown': [ true, {
-                'ignoreAtRules': ['include'] 
+                'ignoreAtRules': ['include']
             }
         ],
         'at-rule-semicolon-newline-after': 'always',

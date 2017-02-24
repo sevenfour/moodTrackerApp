@@ -18,10 +18,11 @@ export default Route.extend(ApplicationRouteMixin, {
 
     isAuthenticated: alias('session.isAuthenticated'),
 
-    model(params, transition) {
+    model() {
         'use strict';
 
         let user = null;
+        let config = null;
 
         if (this.get('isAuthenticated')) {
             return fetch('/api/users/id', {
@@ -34,16 +35,21 @@ export default Route.extend(ApplicationRouteMixin, {
                     if (response.ok) {
                         return response.json();
                     } else if (response.status === 403) {
-                        transition.send('invalidateSession');
+                        // TODO: uncomment the following code when authorization is completed
+                        // transition.send('invalidateSession');
                     }
                 })
                 .then((result) => {
                     user = result;
+                })
+                .then(() => {
+                    config = {};
                 });
         }
 
         return RSVP.hash({
-            user
+            user,
+            config
         });
     },
 
@@ -112,6 +118,11 @@ export default Route.extend(ApplicationRouteMixin, {
                       this.get('store').createRecord('user', user);
 
                       set(this.currentModel, 'user', user);
+                  })
+                  .then(() => {
+                      const config = {};
+
+                      set(this.currentModel, 'config', config);
                   })
                   .catch((reason) => {
                       reject(reason);

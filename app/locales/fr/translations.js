@@ -16,10 +16,41 @@ export default {
         'worried': 'Inquiet' // *
     },
 
+    'stressor': {
+        '1': 'Travail', // *
+        '2': 'Relations', // *
+        '3': 'Questions liées aux enfants, à leurs soins', // *
+        '4': 'Questions liées aux parents, à leurs soins', // *
+        '5': 'Collègues', // *
+        '6': 'Finances', // *
+        '7': 'Deuil', // *
+        '8': 'Santé', // *
+        '9': 'Retraite', // *
+        '10': 'Domaine juridique', // *
+        '11': 'Ménage', // *
+        '12': 'Famille', // *
+        '13': 'Autre', // *
+        '14': 'Image corporelle', // *
+        '15': 'Déplacements', // *
+        '16': 'Voyages' // *
+    },
+
+    'trigger': {
+        '1': 'Situation - Fr -',
+        '2': 'Thought - Fr -',
+        '3': 'Feeling - Fr -',
+        '4': 'Behaviour - Fr -',
+        '5': 'Sensation - Fr -'
+    },
+
     'serverError': {
         'unauthorized': 'Les données d’ouverture de session sont incorrectes. Veuillez réessayer.',
         'runtime.error': `Un problème est survenu dans le traitement de votre requête.
             Veuillez réessayer plus tard.` // *
+    },
+
+    'miscellaneous': {
+        'characters': 'Caractères' // *
     },
 
     /* Buttons - START - ------------------------------------------------------------------------ */
@@ -27,7 +58,9 @@ export default {
     'btns': {
         'login': 'Ouvrir une session', // *
         'dismiss': 'Dismiss - Fr -',
-        'reload': 'Reload - Fr -'
+        'reload': 'Reload - Fr -',
+        'save': 'Sauvegarder', // *
+        'back': 'Retour' // *
     },
 
     /* Buttons - END - -------------------------------------------------------------------------- */
@@ -76,7 +109,25 @@ export default {
     /* Mood Tracker page - START - -------------------------------------------------------------- */
 
     'moodTracker': {
-        'title': 'Comment vous êtes-vous senti?'
+        'emotionsTitle': 'Comment vous êtes-vous senti?', // *
+        'behaviourTitle': 'Que s’est-il produit?', // *
+        'behaviourPlaceholder': 'Décrivez la situation ici', // *
+        'triggers': 'Triggers - Fr -',
+        'stressors': 'Stresseurs', // *
+        'toggle': {
+            'triggers': 'Toggle triggers list - Fr -',
+            'stressors': 'Toggle stressors list - Fr -'
+        },
+        'noTriggersTitle': 'Sorry, no triggers are present. - Fr -',
+        'noStressorsTitle': 'Désolé, aucun stress sont présents.', // *
+        'error': {
+            'charCountExceeds': 'Désolé, le nombre maximal de caractères permis est {{MAX_CHARS}}.', // *
+            'moodInFuture': `Désolé, vous ne pourrez plus effectuer de suivi d’humeurs dans
+                le futur.`, // *
+            'duplicateMood': 'Vous avez déjà entré une humeur pour cette date et cette heure.', // *
+            'server': `Une erreur inattendue est survenue sur le serveur.
+            Veuillez réessayer d’enregistrer votre humeur.` // *
+        }
     },
 
     /* Mood Tracker page - END - ---------------------------------------------------------------- */
@@ -84,10 +135,59 @@ export default {
     /* Mood History page - START - -------------------------------------------------------------- */
 
     'moodHistory': {
-        'title': 'Historique des humeurs'
-    }
+        'title': 'Historique des humeurs' // *
+    },
 
     /* Mood History page - END - ---------------------------------------------------------------- */
 
     /* Pages - END - ---------------------------------------------------------------------------- */
+
+    /* Dates related - START - ------------------------------------------------------------------ */
+
+    'monthsFull': () => {
+        'use strict';
+
+        return [ 'janvier', 'février', 'mars', 'avril', 'mai', 'juin',
+            'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre' ];
+    },
+    'monthsShort': () => {
+        'use strict';
+
+        return [ 'jan', 'fev', 'mar', 'avr', 'mai', 'juin',
+            'juil', 'aou', 'sep', 'oct', 'nov', 'dec' ];
+    },
+    'weekdaysFull': () => {
+        'use strict';
+
+        return [ 'Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi' ];
+    },
+    'weekdaysShort': () => {
+        'use strict';
+
+        return [ 'Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam' ];
+    },
+
+    /* Dates related - END - -------------------------------------------------------------------- */
+
+    /* jQuery libraries - START - --------------------------------------------------------------- */
+
+    'pickadate': {
+        // Buttons
+        'today': 'Aujourd’hui', // *
+        'clear': 'Effacer', // *
+        'close': 'Fermer', // *
+
+        // Accessibility labels
+        'labelMonthNext': 'Mois suivant', // *
+        'labelMonthPrev': 'Mois précédent', // *
+        'labelMonthSelect': 'Indiquer un mois', // *
+        'labelYearSelect': 'Indiquer une année' // *
+    },
+
+    'pickatime': {
+        // Clear button
+        'clear': 'Effacer' // *
+    }
+
+    /* jQuery libraries - END - ----------------------------------------------------------------- */
 };

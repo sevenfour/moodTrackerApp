@@ -6,7 +6,8 @@
 html,
 body {
     height: 100%;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: scroll;
 }
 
 body {
@@ -66,7 +67,7 @@ p {
     background-color: $white;
     background-image: none;
     cursor: pointer;
-    padding: 10px 25px;
+    padding: 2px 20px;
     vertical-align: middle;
     text-align: center;
     text-decoration: none;
@@ -74,7 +75,7 @@ p {
     white-space: nowrap;
     color: $btn-color;
     font-family: 'Uniform Rounded Medium';
-    font-size: 20px;
+    font-size: 18px;
     touch-action: manipulation;
 
     &.disabled {
@@ -203,8 +204,8 @@ p {
     /* stylelint-enable no-indistinguishable-colors */
     background-color: $white;
     cursor: pointer;
-    width: 40px;
-    height: 40px;
+    width: 25px;
+    height: 25px;
     touch-action: manipulation;
     user-select: none;
 
@@ -254,6 +255,10 @@ p {
     right: 0;
     left: 0;
     z-index: 1030;
+    /* stylelint-disable no-indistinguishable-colors */
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.15);
+    /* stylelint-enable no-indistinguishable-colors */
+    background-color: $white;
     padding: 10px 0;
     width: 100%;
     text-align: center;
@@ -463,9 +468,7 @@ p {
     position: relative;
     float: left;
     transition: width 250ms ease-in-out;
-    padding-right: 15px;
-    padding-left: 15px;
-    width: calc(100% - 30px);
+    width: 100%;
     min-height: 1px;
     text-align: center;
 }
@@ -494,6 +497,7 @@ p {
 
     .horizontal-form {
         margin: 30px auto auto;
+        padding: 0 15px;
 
         @media ( min-width: 600px ) {
             width: 75%;
@@ -525,7 +529,7 @@ p {
     }
 }
 
-.page-title {
+.page-section-title {
     line-height: 1.2em;
     color: $true-blue;
     font-family: 'Uniform Rounded Light';

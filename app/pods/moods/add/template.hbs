@@ -1,5 +1,127 @@
 <div class="page mood-tracker-page">
-    <h2 class="page-title">
-        {{t 'moodTracker.title'}}
+    <h2 class="page-section-title">
+        {{t 'moodTracker.emotionsTitle'}}
     </h2>
+    {{#each moods as |mood|}}
+        {{mood-value-input
+            mood=mood
+            moodValueChanged=(route-action 'moodValueSet')}}
+    {{/each}}
+    <div class="menu-title-btn-holder col-xs-6 col-sm-6 col-md-6">
+        <h2 class="page-section-title">
+            {{t 'moodTracker.triggers'}}
+        </h2>
+        <button type="button"
+            class="btn-round-with-icon btn-triggers"
+            {{action 'toggleList' 'triggers'}}>
+            <span class="sr-only">{{t 'moodTracker.toggle.triggers'}}</span>
+            {{#if isTriggersListOpen}}
+                {{inline-svg 'icon-minus' class='icon minus-icon'}}
+            {{else}}
+                {{inline-svg 'icon-plus' class='icon plus-icon'}}
+            {{/if}}
+        </button>
+    </div>
+    <div class="menu-title-btn-holder col-xs-6 col-sm-6 col-md-6">
+        <h2 class="page-section-title">
+            {{t 'moodTracker.stressors'}}
+        </h2>
+        <button type="button"
+            class="btn-round-with-icon btn-stressors"
+            {{action 'toggleList' 'stressors'}}>
+            <span class="sr-only">{{t 'moodTracker.toggle.stressors'}}</span>
+            {{#if isStressorsListOpen}}
+                {{inline-svg 'icon-minus' class='icon minus-icon'}}
+            {{else}}
+                {{inline-svg 'icon-plus' class='icon plus-icon'}}
+            {{/if}}
+        </button>
+    </div>
+    {{#liquid-spacer class='col-xs-12 col-sm-12 col-md-12 no-padding-left-right'}}
+        {{#if isTriggersListOpen}}
+            <div class="triggers-selection-list">
+                {{#each model.config.triggers as |trigger|}}
+                    <button type="button"
+                        class={{is-item-selected trigger selectedTriggers selectedTriggers.length}}
+                        {{action 'addItem' trigger triggerList}}>
+                        {{trigger.name}}
+                    </button>
+                {{else}}
+                    <span class="no-selection-title">
+                        {{t 'moodTracker.noTriggersTitle'}}
+                    </span>
+                {{/each}}
+            </div>
+        {{/if}}
+    {{/liquid-spacer}}
+    {{#liquid-spacer class='col-xs-12 col-sm-12 col-md-12 no-padding-left-right'}}
+        {{#if isStressorsListOpen}}
+            <div class="stressors-selection-list">
+                {{#each model.config.stressors as |stressor|}}
+                    <button type="button"
+                        class={{is-item-selected stressor selectedStressors selectedStressors.length}}
+                        {{action 'addItem' stressor selectedStressors}}>
+                    </button>
+                {{else}}
+                    <span class="no-selection-title">
+                        {{t 'moodTracker.noStressorsTitle'}}
+                    </span>
+                {{/each}}
+            </div>
+        {{/if}}
+    {{/liquid-spacer}}
+    <div class="date-picker-outlet">
+    </div>
+    <div class="time-picker-outlet">
+    </div>
+    <div class="behaviour-holder col-xs-12 col-sm-12 col-md-12">
+        <h2 class="page-section-title">
+            {{t 'moodTracker.behaviourTitle'}}
+        </h2>
+        <div class="date-picker-holder col-xs-6 col-sm-6 col-md-6 no-padding-left">
+            {{date-picker
+                date=mood.date
+                class='date pull-left'
+                format='dd/mm/yyyy'
+                selectYears='false'
+                selectMonths='false'
+                locale=i18n.locale
+                datePickerContainer='.date-picker-outlet'
+                onSet=(route-action 'setMoodDate')}}
+            {{inline-svg 'icon-caret' class='caret-icon'}}
+        </div>
+        <div class="time-picker-holder col-xs-6 col-sm-6 col-md-6 no-padding-right">
+            {{inline-svg 'icon-caret' class='caret-icon caret-time-icon pull-right'}}
+            {{time-picker
+                value=mood.time
+                class='time pull-right'
+                interval=timeDiff
+                max=false
+                locale=i18n.locale
+                timePickerContainer='.time-picker-outlet'}}
+        </div>
+        {{textarea
+            value=model.mood.behaviour
+            class='textarea'
+            spellcheck='true'
+            placeholder=(t 'moodTracker.behaviourPlaceholder')}}
+        <span class="charsCount pull-right">
+            {{behaviourCharsCount}}/{{BEHAVIOUR_MAX_CHARS}}&nbsp;{{t 'miscellaneous.characters'}}
+        </span>
+        {{#liquid-spacer class='error-holder'}}
+            {{#if showBehaviourError}}
+                <p class="text-danger">
+                    {{t error.behaviour MAX_CHARS=BEHAVIOUR_MAX_CHARS}}
+                </p>
+            {{/if}}
+        {{/liquid-spacer}}
+    </div>
+    <div class="btn-holder col-xs-12 col-sm-12 col-md-12 text-center">
+        {{#link-to 'my-starling' type='button' class='btn btn-discouraged'}}
+            {{t 'btns.back'}}
+        {{/link-to}}
+        <button type="button" class="btn" disabled={{isSavedDisabled}}>
+            {{t 'btns.save'}}
+        </button>
+    </div>
 </div>

@@ -5,6 +5,7 @@
     "es6-shim": "^0.35.2"
   },
   "devDependencies": {
-    "bootstrap": "^3.3.7"
+    "bootstrap-sass": "^3.3.7",
+    "pickadate": "^3.5.6"
   }
 }

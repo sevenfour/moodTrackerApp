@@ -1,0 +1,19 @@
+<div class="container-fluid">
+    <label class="mood-label {{mood.emotion}} pull-left">
+        {{moodLowLabel}}
+    </label>
+    <label class="mood-label {{mood.emotion}} pull-right">
+        {{moodHighLabel}}
+    </label>
+</div>
+<div class="mood-values-holder container-fluid">
+    {{#each moodValueArr as |moodValue|}}
+        <input type="radio" id="{{mood.emotion}}_{{moodValue.value}}" class="mood-value-radio"
+            name={{mood.emotion}} value={{moodValue.value}} aria-label={{moodValue.value}}
+            onClick={{action 'moodValueChanged' mood.emotion moodValue.value}}>
+        <label for="{{mood.emotion}}_{{moodValue.value}}"
+            class="mood-value-label {{if (is-gt moodValue.value -1) 'positive' 'negative'}}">
+            {{moodValue.value}}
+        </label>
+    {{/each}}
+</div>

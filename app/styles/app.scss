@@ -2,6 +2,90 @@
 // Fonts used at Starling
 @import 'components/starling/fonts';
 
-/// Starling overrides to Bootstrap
+// Starling variables
 @import 'components/starling/variables';
-@import 'components/starling/bootstrap_overrides';
+
+// Starling overrides to Bootstrap variables
+@import 'components/starling/bootstrap-variables-overrides';
+
+/* Include what's needed from Bootstrap - START - ----------------------------------------------- */
+
+// Core variables
+@import 'bower_components/bootstrap-sass/assets/stylesheets/bootstrap/variables';
+
+/* Bootstrap mixins - START - ------------------------------------------------------------------- */
+
+// Utilities
+@import 'bower_components/bootstrap-sass/assets/stylesheets/bootstrap/mixins/opacity';
+@import 'bower_components/bootstrap-sass/assets/stylesheets/bootstrap/mixins/labels';
+@import 'bower_components/bootstrap-sass/assets/stylesheets/bootstrap/mixins/hide-text';
+@import 'bower_components/bootstrap-sass/assets/stylesheets/bootstrap/mixins/image';
+@import 'bower_components/bootstrap-sass/assets/stylesheets/bootstrap/mixins/resize';
+@import 'bower_components/bootstrap-sass/assets/stylesheets/bootstrap/mixins/responsive-visibility';
+@import 'bower_components/bootstrap-sass/assets/stylesheets/bootstrap/mixins/size';
+@import 'bower_components/bootstrap-sass/assets/stylesheets/bootstrap/mixins/tab-focus';
+@import 'bower_components/bootstrap-sass/assets/stylesheets/bootstrap/mixins/text-emphasis';
+@import 'bower_components/bootstrap-sass/assets/stylesheets/bootstrap/mixins/text-overflow';
+@import 'bower_components/bootstrap-sass/assets/stylesheets/bootstrap/mixins/vendor-prefixes';
+
+// Components
+@import 'bower_components/bootstrap-sass/assets/stylesheets/bootstrap/mixins/buttons';
+@import 'bower_components/bootstrap-sass/assets/stylesheets/bootstrap/mixins/list-group';
+@import 'bower_components/bootstrap-sass/assets/stylesheets/bootstrap/mixins/nav-divider';
+@import 'bower_components/bootstrap-sass/assets/stylesheets/bootstrap/mixins/forms';
+
+// Skins
+@import 'bower_components/bootstrap-sass/assets/stylesheets/bootstrap/mixins/background-variant';
+@import 'bower_components/bootstrap-sass/assets/stylesheets/bootstrap/mixins/border-radius';
+@import 'bower_components/bootstrap-sass/assets/stylesheets/bootstrap/mixins/gradients';
+
+// Layout
+@import 'bower_components/bootstrap-sass/assets/stylesheets/bootstrap/mixins/clearfix';
+@import 'bower_components/bootstrap-sass/assets/stylesheets/bootstrap/mixins/center-block';
+@import 'bower_components/bootstrap-sass/assets/stylesheets/bootstrap/mixins/nav-vertical-align';
+@import 'bower_components/bootstrap-sass/assets/stylesheets/bootstrap/mixins/grid-framework';
+@import 'bower_components/bootstrap-sass/assets/stylesheets/bootstrap/mixins/grid';
+
+/* Bootstrap mixins - END - --------------------------------------------------------------------- */
+
+// Reset and dependencies
+@import 'bower_components/bootstrap-sass/assets/stylesheets/bootstrap/normalize';
+
+// Core CSS
+@import 'bower_components/bootstrap-sass/assets/stylesheets/bootstrap/scaffolding';
+@import 'bower_components/bootstrap-sass/assets/stylesheets/bootstrap/type';
+@import 'bower_components/bootstrap-sass/assets/stylesheets/bootstrap/grid';
+@import 'bower_components/bootstrap-sass/assets/stylesheets/bootstrap/forms';
+@import 'bower_components/bootstrap-sass/assets/stylesheets/bootstrap/buttons';
+
+// Components
+@import 'bower_components/bootstrap-sass/assets/stylesheets/bootstrap/button-groups';
+@import 'bower_components/bootstrap-sass/assets/stylesheets/bootstrap/input-groups';
+@import 'bower_components/bootstrap-sass/assets/stylesheets/bootstrap/navs';
+@import 'bower_components/bootstrap-sass/assets/stylesheets/bootstrap/navbar';
+@import 'bower_components/bootstrap-sass/assets/stylesheets/bootstrap/labels';
+@import 'bower_components/bootstrap-sass/assets/stylesheets/bootstrap/list-group';
+@import 'bower_components/bootstrap-sass/assets/stylesheets/bootstrap/responsive-embed';
+@import 'bower_components/bootstrap-sass/assets/stylesheets/bootstrap/close';
+
+// Utility classes
+@import 'bower_components/bootstrap-sass/assets/stylesheets/bootstrap/utilities';
+@import 'bower_components/bootstrap-sass/assets/stylesheets/bootstrap/responsive-utilities';
+
+/* Include what's needed from Bootstrap - END - ------------------------------------------------- */
+
+// Pickadate date-picker styles
+@import 'bower_components/pickadate/lib/themes/classic';
+@import 'bower_components/pickadate/lib/themes/classic.date';
+@import 'bower_components/pickadate/lib/themes/classic.time';
+
+// Starling overrides to Pickadate/Pickatime
+@import 'components/starling/pickadate-pickatime-overrides';
+
+// Starling SVG images styles
+@import 'components/starling/svg';
+
+// Starling overrides to Bootstrap
+@import 'components/starling/variables';
+@import 'components/starling/bootstrap-variables-overrides';
+@import 'components/starling/bootstrap-overrides';

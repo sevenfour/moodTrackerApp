@@ -1,3 +1,14 @@
+// Count the number of characters in a string
+export function countChars(string) {
+    'use strict';
+
+    if (string) {
+        return string.trim().length;
+    } else {
+        return 0;
+    }
+}
+
 export function checkFirstName(name) {
     'use strict';
 
