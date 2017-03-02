@@ -40,7 +40,7 @@ test('success message is set', function(assert) {
 test('Both error and success messages are set', function(assert) {
     'use strict';
 
-    const successMessage = 'Test error';
+    const errorMessage = 'Test error';
     const successMessage = 'Test success';
 
     this.set('error', errorMessage);
@@ -50,7 +50,7 @@ test('Both error and success messages are set', function(assert) {
         errorMessage=error
         successMessage=success}}`);
 
-    assert.ok(this.$('.toast-message').hasClass('error'));    
+    assert.ok(this.$('.toast-message').hasClass('error'));
     assert.ok(this.$('.toast-message').hasClass('success'));
     assert.ok(this.$('.toast-message').hasClass('hide-message'));
 });
