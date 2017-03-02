@@ -1,7 +1,7 @@
 import { moduleForModel, test } from 'ember-qunit';
 
-moduleForModel('trigger', 'Unit | Model | trigger', {
-    needs: []
+moduleForModel('config', 'Unit | Model | config', {
+    needs: [ 'model:stressor', 'model:trigger' ]
 });
 
 test('it exists', function(assert) {

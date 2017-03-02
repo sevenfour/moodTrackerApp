@@ -6,14 +6,18 @@
         {{moodHighLabel}}
     </label>
 </div>
-<div class="mood-values-holder container-fluid">
+<!-- disable invalid-interactive -->
+{{! template-lint-disable invalid-interactive }}
+<div class="mood-values-holder container-fluid"
+    onClick={{action 'moodValueChanged'}}>
     {{#each moodValueArr as |moodValue|}}
         <input type="radio" id="{{mood.emotion}}_{{moodValue.value}}" class="mood-value-radio"
-            name={{mood.emotion}} value={{moodValue.value}} aria-label={{moodValue.value}}
-            onClick={{action 'moodValueChanged' mood.emotion moodValue.value}}>
+            name={{mood.emotion}} value={{moodValue.value}} aria-label={{moodValue.value}}>
         <label for="{{mood.emotion}}_{{moodValue.value}}"
             class="mood-value-label {{if (is-gt moodValue.value -1) 'positive' 'negative'}}">
             {{moodValue.value}}
         </label>
     {{/each}}
 </div>
+<!-- enable invalid-interactive -->
+{{! template-lint-enable invalid-interactive }}

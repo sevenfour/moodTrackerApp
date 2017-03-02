@@ -1,7 +1,5 @@
-import DS from 'ember-data';
+import Model from 'ember-data/model';
 import computed from 'ember-computed';
-
-const { Model } = DS;
 
 export default Model.extend({
     name: computed('i18n.locale', function() {

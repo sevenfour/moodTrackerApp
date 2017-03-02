@@ -9,6 +9,8 @@ export default Base.extend({
 
     serverTokenEndpoint: '/mobile/api/auth/mlogin',
 
+    logoutEndpoint: '/mobile/api/auth/logout',
+
     restore(data) {
         'use strict';
 
@@ -35,8 +37,7 @@ export default Base.extend({
                     username: options.identification,
                     password: options.password,
                     deviceId: 'pwa-app'
-                }),
-                credentials: 'omit'
+                })
                 })
                 .then((response) => {
                     return response.json();
@@ -64,7 +65,7 @@ export default Base.extend({
         'use strict';
 
         return new Promise((resolve, reject) => {
-            fetch('/api/auth/logout', {
+            fetch(this.get('logoutEndpoint'), {
                 method: 'GET'
                 })
                 .then((response) => {

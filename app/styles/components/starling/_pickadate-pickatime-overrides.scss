@@ -1,6 +1,10 @@
 
 /* Shared styles - START - ---------------------------------------------------------------------- */
 
+.picker__holder {
+    width: 100%;
+}
+
 .picker__input {
     cursor: pointer;
 }
@@ -18,7 +22,9 @@
 /* Pickatime time-picker custom styles - START - ------------------------------------------------ */
 
 .picker__list {
-    padding: 0 0 4em;
+    padding: 0 0 4.17em;
 }
+
+// 
 
 /* Pickatime time-picker custom styles - END - -------------------------------------------------- */

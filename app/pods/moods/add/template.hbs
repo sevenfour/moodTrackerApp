@@ -39,28 +39,37 @@
     </div>
     {{#liquid-spacer class='col-xs-12 col-sm-12 col-md-12 no-padding-left-right'}}
         {{#if isTriggersListOpen}}
-            <div class="triggers-selection-list">
-                {{#each model.config.triggers as |trigger|}}
-                    <button type="button"
-                        class={{is-item-selected trigger selectedTriggers selectedTriggers.length}}
-                        {{action 'addItem' trigger triggerList}}>
-                        {{trigger.name}}
-                    </button>
+            <!-- disable invalid-interactive -->
+            {{! template-lint-disable invalid-interactive }}
+            <div class="triggers-selection"
+                onClick={{route-action 'triggerChanged'}}>
+                {{#each model.config.triggerTypes as |trigger|}}
+                    <div>
+                        <input type="radio" id="{{trigger.name}}-radio" class="trigger-radio"
+                            name="mood-trigger" value={{trigger.name}} aria-label={{trigger.name}}>
+                        <label for="{{trigger.name}}-radio" class="trigger">
+                            {{trigger.name}}
+                        </label>
+                    </div>
                 {{else}}
                     <span class="no-selection-title">
                         {{t 'moodTracker.noTriggersTitle'}}
                     </span>
                 {{/each}}
             </div>
+            <!-- enable invalid-interactive -->
+            {{! template-lint-enable invalid-interactive }}
         {{/if}}
     {{/liquid-spacer}}
     {{#liquid-spacer class='col-xs-12 col-sm-12 col-md-12 no-padding-left-right'}}
         {{#if isStressorsListOpen}}
-            <div class="stressors-selection-list">
-                {{#each model.config.stressors as |stressor|}}
+            <div class="stressors-selection">
+                {{#each model.config.stressorTypes as |stressor|}}
                     <button type="button"
-                        class={{is-item-selected stressor selectedStressors selectedStressors.length}}
+                        class="stressor
+                            {{is-item-selected stressor selectedStressors selectedStressors.length}}"
                         {{action 'addItem' stressor selectedStressors}}>
+                        {{stressor.name}}
                     </button>
                 {{else}}
                     <span class="no-selection-title">
@@ -120,7 +129,8 @@
         {{#link-to 'my-starling' type='button' class='btn btn-discouraged'}}
             {{t 'btns.back'}}
         {{/link-to}}
-        <button type="button" class="btn" disabled={{isSavedDisabled}}>
+        <button type="button" class="btn" disabled={{isSavedDisabled}}
+            {{action 'saveMood'}}>
             {{t 'btns.save'}}
         </button>
     </div>

@@ -23,8 +23,10 @@ export function formatShort(date) {
 // create a date object from a date and time string (e.g. 11:30)
 export function getDate(date, time) {
     'use strict';
-    let moodTimeArr = time.toString().split(':');
+
+    let moodTimeArr = time.replace(/[^0-9, /:]+/g, '').toString().split(':');
     let newDate = new Date(date);
+
     newDate.setHours(moodTimeArr[0], moodTimeArr[1], 0, 0);
 
     return newDate;

@@ -163,6 +163,9 @@
 }
 
 .mood-tracker-page {
+    $stressorColour: $fanta-purple;
+    $triggerColour: $berry-blue;
+
     .menu-title-btn-holder {
         margin-top: -10px;
     }
@@ -180,22 +183,66 @@
         }
     }
 
-    .triggers-selection-list {
+    .triggers-selection {
         background-color: $ice-blue;
+        text-align: center;
     }
 
-    .stressors-selection-list {
+    .stressors-selection {
         background-color: $gum-grape;
+        text-align: justify;
     }
 
-    .triggers-selection-list,
-    .stressors-selection-list {
+    .triggers-selection,
+    .stressors-selection {
         margin-top: 10px;
         padding: 15px;
     }
 
+    .trigger,
+    .stressor {
+        margin: 5px;
+        border: 1px solid;
+        border-radius: 5px;
+        background-color: $white;
+        padding: 5px 10px;
+        line-height: 1.188em;
+        font-family: 'Uniform Rounded Regular';
+        font-size: 16px;
+    }
+
+    .trigger {
+        border-color: $triggerColour;
+        cursor: pointer;
+        width: 120px;
+        color: $triggerColour;
+    }
+
+    .stressor {
+        border-color: $stressorColour;
+        color: $stressorColour;
+
+        &.selected {
+            background-color: $stressorColour;
+            color: $white;
+        }
+    }
+
+    .trigger-radio {
+        position: absolute;
+        left: -9999px;
+
+        &:checked {
+            + .trigger {
+                background-color: $triggerColour;
+                color: $white;
+            }
+        }
+    }
+
     .no-selection-title {
         display: block;
+        text-align: center;
         color: $cement-grey;
         font-family: 'Uniform Rounded Regular';
         font-size: $font-size-small;
@@ -209,6 +256,7 @@
 
     .date,
     .time {
+        border: none;
         cursor: pointer;
         width: 85%;
         line-height: 17px;
@@ -217,7 +265,7 @@
     }
 
     .time {
-        padding-right: 30px;
+        padding-right: 15px;
         width: 80%;
         text-align: right;
     }
@@ -225,11 +273,11 @@
     .caret-icon {
         position: absolute;
         top: 0;
-        right: 25%;
+        right: 35%;
         bottom: 0;
         margin: auto 0;
-        width: 21px;
-        height: 20px;
+        width: 10px;
+        height: 11px;
         pointer-events: none;
 
         &.caret-time-icon {

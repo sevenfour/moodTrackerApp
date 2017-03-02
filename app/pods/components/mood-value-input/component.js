@@ -49,10 +49,18 @@ export default Component.extend({
 
     actions: {
 
-        moodValueChanged(emotion, value) {
+        moodValueChanged(event) {
             'use strict';
 
-            this.moodValueChanged(emotion, value);
+            const source = event.srcElement;
+            const value = source.innerText;
+
+            let emotion = source.htmlFor;
+
+            if (emotion && value) {
+                emotion = emotion.match(/(?:(?!\_).)*/i)[0];
+                this.moodValueChanged(emotion, value);
+            }
         }
 
     }

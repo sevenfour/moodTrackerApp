@@ -1,0 +1,17 @@
+<!-- toast-message component - START - -->
+{{#if isError}}
+    <h4 class='message-text'>
+        {{t errorMessage}}
+    </h4>
+    <button class="btn btn-discouraged" {{action 'dismiss'}}>
+        {{t 'btns.dismiss'}}
+    </button>
+{{else if isSuccess}}
+    <h4 class='message-text'>
+        {{t successMessage}}
+    </h4>
+    <button class="btn" {{action 'dismiss'}}>
+        {{t 'btns.ok'}}
+    </button>
+{{/if}}
+<!-- toast-message component - END - -->

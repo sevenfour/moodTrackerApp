@@ -1,7 +1,8 @@
 import Controller from 'ember-controller';
 import computed from 'ember-computed';
-import { alias, equal, or } from 'ember-computed';
+import { alias, equal, or, empty } from 'ember-computed';
 import { countChars } from '../../../utils/strings';
+import { getDate } from '../../../utils/dates';
 
 export default Controller.extend({
 
@@ -42,9 +43,11 @@ export default Controller.extend({
 
     timeDiff: 30,    // 30 minutes time limit for next mood time entries
 
-    selectedTriggers: alias('model.mood.triggers'),
-
     selectedStressors: alias('model.mood.stressors'),
+
+    isMoodDateEmpty: empty('mood.date'),
+
+    isMoodTimeEmpty: empty('mood.time'),
 
     isBehaviourEmpty: equal('behaviourCharsCount', 0),
 
@@ -91,6 +94,16 @@ export default Controller.extend({
             new Date().getMinutes() - this.get('timeDiff')));
     }),
 
-    isSavedDisabled: alias('isBehaviourNotValid')
+    moodDateTimeUTC: computed('mood.date', 'mood.time', function() {
+        'use strict';
+
+        const date = this.get('mood.date');
+        const time = this.get('mood.time');
+
+        return date && time ? getDate(date, time) : undefined;
+    }),
+
+    isSavedDisabled: or('isMoodDateEmpty', 'isMoodTimeEmpty', 'isMoodInFuture',
+        'isBehaviourNotValid')
 
 });

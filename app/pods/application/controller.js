@@ -3,6 +3,10 @@ import service from 'ember-service/inject';
 
 export default Controller.extend({
 
-    session: service()
+    session: service(),
+
+    errorMessage: null,
+
+    successMessage: null
 
 });

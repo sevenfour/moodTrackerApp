@@ -12,38 +12,41 @@ export default Route.extend(ApplicationRouteMixin, {
 
     fastboot: service(),
 
-    language: 'default',
+    triggers: [
+        { id: 1 },
+        { id: 2 },
+        { id: 3 },
+        { id: 4 },
+        { id: 5 },
+        { id: 6 }
+    ],
 
     routeAfterAuthentication: 'my-starling',
 
     isAuthenticated: alias('session.isAuthenticated'),
 
-    model() {
+    model(params, transition) {
         'use strict';
 
         let user = null;
         let config = null;
 
         if (this.get('isAuthenticated')) {
-            return fetch('/api/users/id', {
-                method: 'GET',
-                headers: {
-                  'Authorization': `Basic ${this.get('session.data.authenticated.token')}`
-                }
-                })
-                .then((response) => {
-                    if (response.ok) {
-                        return response.json();
-                    } else if (response.status === 403) {
-                        // TODO: uncomment the following code when authorization is completed
-                        // transition.send('invalidateSession');
-                    }
-                })
-                .then((result) => {
-                    user = result;
-                })
-                .then(() => {
-                    config = {};
+            const store = this.get('store');
+            const token = this.get('session.data.authenticated.token');
+
+            const configNamespace = store.adapterFor('config').get('namespace');
+
+            const userURL = store.adapterFor('user').get('namespace');  // same as user namespace
+            const configURL = `${configNamespace}/configs/id`;
+
+            user = this.getUser(transition, userURL, token, store)
+                .then((user) => {
+                    return user;
+                });
+            config = this.getConfig(transition, configURL, token, store)
+                .then((config) => {
+                    return config;
                 });
         }
 
@@ -53,101 +56,197 @@ export default Route.extend(ApplicationRouteMixin, {
         });
     },
 
-  afterModel(model) {
-      'use strict';
+    afterModel(model) {
+        'use strict';
 
-      if (this.get('isAuthenticated') && model) {
-          const userLang = model.user.get('locale.language');
+        if (this.get('isAuthenticated') && model) {
+            const userLang = model.user.get('locale.language');
 
-          if (userLang) {
-              this.set('i18n.locale', userLang);
-          }
-      }
-  },
+            if (userLang) {
+                this.set('i18n.locale', userLang);
+            }
+        }
+    },
 
-  // Sets document's title (fastboot provided)
-  title() {
-      'use strict';
+    // Sets document's title (fastboot provided)
+    title() {
+        'use strict';
 
-      return this.get('i18n').t('document.title');
-  },
+        return this.get('i18n').t('document.title');
+    },
 
-  saveUserData(data) {
-      'use strict';
+    getUser(transition, userURL, token, store) {
+        'use strict';
 
-      const promises = this.store.peekAll(data).filterBy('hasDirtyAttributes').map((datum) => {
-          return datum.save();
-      });
+        let user = null;
+        let locale = null;
 
-      return RSVP.all(promises);
-  },
+        return new RSVP.Promise((resolve) => {
+            fetch(userURL, {
+                method: 'GET',
+                headers: {
+                  'Authorization': `Basic ${token}`
+                }
+                })
+                .then((response) => {
+                    if (response.ok) {
+                        return response.json();
+                    } else if (response.status === 401) {
+                        if (transition) {
+                            transition.send('invalidateSession');
+                        }
+                    }
+                })
+                .then((result) => {
+                    user = store.createRecord('user', result);
+                    locale = store.createRecord('locale', result.locale);
 
-  actions: {
+                    user.set('locale', locale);
 
-      switchLanguage() {
-          'use strict';
+                    resolve(user);
+                });
+        });
+    },
 
-          const locale = this.modelFor(this.routeName).user.get('locale');
+    getConfig(transition, configURL, token, store) {
+        'use strict';
 
-          if (this.get('i18n.locale') === 'fr') {
-              locale.set('language', 'en');
-          } else {
-              locale.set('language', 'fr');
-          }
+        let config;
 
-          this.language = locale.get('language');
-          // i18n.locale will be set in afterModel after the refresh
+        return new RSVP.Promise((resolve) => {
+            fetch(configURL, {
+                method: 'GET',
+                headers: {
+                  'Authorization': `Basic ${token}`
+                }
+                })
+                .then((response) => {
+                    if (response.ok) {
+                        return response.json();
+                    } else if (response.status === 401) {
+                      if (transition) {
+                          transition.send('invalidateSession');
+                      }
+                    }
+                })
+                .then((result) => {
+                    config = store.createRecord('config', {
+                        id: result.id,
+                        code: result.code
+                    });
 
-          locale.save().then(() => {
-              // force view to re-render (re-fires all the route hooks)
-              this.refresh();
-          }).catch(() => {
-              // NOTE: since locale.save() would fail without a server, refresh the view anyway
-              this.refresh();
-          });
-      },
+                    result.stressorTypes.forEach((stressorObj) => {
+                        store.createRecord('stressor', stressorObj);
+                    });
 
-      authenticate(credentials) {
-          'use strict';
+                    this.get('triggers').forEach((triggerObj) => {
+                        store.createRecord('trigger', triggerObj);
+                    });
 
-          return new RSVP.Promise((resolve, reject) => {
-              this.get('session').authenticate('authenticator:custom', credentials)
-                  .then(() => {
-                      let user = this.get('session.data.authenticated.user');
+                    config.set('stressorTypes', store.peekAll('stressor'));
+                    config.set('triggerTypes', store.peekAll('trigger'));
 
-                      this.get('store').createRecord('user', user);
+                    resolve(config);
+                });
+        });
+    },
 
-                      set(this.currentModel, 'user', user);
-                  })
-                  .then(() => {
-                      const config = {};
+    saveUserData(data) {
+        'use strict';
 
-                      set(this.currentModel, 'config', config);
-                  })
-                  .catch((reason) => {
-                      reject(reason);
-                  });
-          });
-      },
+        const promises = this.store.peekAll(data).filterBy('hasDirtyAttributes').map((datum) => {
+            return datum.save();
+        });
 
-      invalidateSession() {
-          'use strict';
+        return RSVP.all(promises);
+    },
 
-          this.get('session').invalidate();
-      },
+    actions: {
 
-      error(error, transition) {
-          'use strict';
+        // invoked when user selects an item to add to a list
+        addItem(issue, list) {
+            'use strict';
 
-          this._super(...arguments);
+            if (list.includes(issue)) {
+                // remove issue
+                list.removeObject(issue);
+            } else {
+                // add issue
+                list.addObject(issue);
+            }
+        },
 
-          // handle the error
-          // eslint-disable-next-line no-console
-          console.log(`${error.message} in transition to "${transition.targetName}"`); // NOSONAR
-          // eslint-disable-next-line no-console
-          console.log(`${error.stack}`); // NOSONAR
+        switchLanguage() {
+            'use strict';
 
-          return true;
-      }
-  }
+            const locale = this.modelFor(this.routeName).user.get('locale');
+
+            if (this.get('i18n.locale') === 'fr') {
+                locale.set('language', 'en');
+            } else {
+                locale.set('language', 'fr');
+            }
+
+            // i18n.locale will be set in afterModel after the refresh
+            locale.save().then(() => {
+                // force view to re-render (re-fires all the route hooks)
+                this.refresh();
+            }).catch(() => {
+                // NOTE: since locale.save() would fail without a server, refresh the view anyway
+                this.refresh();
+            });
+        },
+
+        authenticate(credentials) {
+            'use strict';
+
+            const store = this.get('store');
+            const token = this.get('session.data.authenticated.token');
+
+            const configNamespace = store.adapterFor('config').get('namespace');
+
+            const userURL = store.adapterFor('user').get('namespace');  // same as user namespace
+            const configURL = `${configNamespace}/configs/id`;
+
+            return new RSVP.Promise((resolve, reject) => {
+                this.get('session').authenticate('authenticator:custom', credentials)
+                    .then(() => {
+                        this.getUser(null, userURL, token, store)
+                            .then((user) => {
+                                set(this.currentModel, 'user', user);
+
+                                this.getConfig(null, configURL, token, store)
+                                    .then((config) => {
+                                        set(this.currentModel, 'config', config);
+
+                                        resolve();
+                                    });
+                            });
+                    })
+                    .catch((reason) => {
+                        reject(reason);
+                    });
+            });
+        },
+
+        invalidateSession() {
+            'use strict';
+
+            this.get('session').invalidate();
+        },
+
+        error(error, transition) {
+            'use strict';
+
+            this._super(...arguments);
+
+            // handle the error
+            // eslint-disable-next-line no-console
+            console.log(`${error.message} in transition to "${transition.targetName}"`); // NOSONAR
+            // eslint-disable-next-line no-console
+            console.log(`${error.stack}`); // NOSONAR
+
+            return true;
+        }
+    }
 });

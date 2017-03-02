@@ -16,5 +16,8 @@
 <div class="page-content">
     {{outlet}}
 </div>
+{{toast-message
+    errorMessage=errorMessage
+    successMessage=successMessage}}
 {{toast-update-ready
     message='New version available'}}

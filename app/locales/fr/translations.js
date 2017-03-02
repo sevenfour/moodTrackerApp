@@ -40,7 +40,8 @@ export default {
         '2': 'Thought - Fr -',
         '3': 'Feeling - Fr -',
         '4': 'Behaviour - Fr -',
-        '5': 'Sensation - Fr -'
+        '5': 'Sensation - Fr -',
+        '6': 'Not sure - Fr -'
     },
 
     'serverError': {
@@ -60,7 +61,8 @@ export default {
         'dismiss': 'Dismiss - Fr -',
         'reload': 'Reload - Fr -',
         'save': 'Sauvegarder', // *
-        'back': 'Retour' // *
+        'back': 'Retour', // *
+        'ok': 'OK - Fr -'
     },
 
     /* Buttons - END - -------------------------------------------------------------------------- */
@@ -120,6 +122,9 @@ export default {
         },
         'noTriggersTitle': 'Sorry, no triggers are present. - Fr -',
         'noStressorsTitle': 'Désolé, aucun stress sont présents.', // *
+        'success': {
+            'goodWork': 'Beau travail! Vous avez bien évalué votre humeur.' // *
+        },
         'error': {
             'charCountExceeds': 'Désolé, le nombre maximal de caractères permis est {{MAX_CHARS}}.', // *
             'moodInFuture': `Désolé, vous ne pourrez plus effectuer de suivi d’humeurs dans

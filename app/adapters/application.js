@@ -1,12 +1,27 @@
 import DS from 'ember-data';
-import DataAdapterMixin from 'ember-simple-auth/mixins/data-adapter-mixin';
+import computed from 'ember-computed';
+import service from 'ember-service/inject';
 
 const { RESTAdapter } = DS;
 
-export default RESTAdapter.extend(DataAdapterMixin, {
+export default RESTAdapter.extend({
 
-    namespace: '/api',
+    namespace: 'mobile/api',
 
-    authorizer: 'authorizer:custom'
+    session: service(),
+
+    headers: computed(function() {
+        'use strict';
+
+        const { token } = this.get('session.data.authenticated');
+
+        let header = {};
+
+        if (this.get('session.isAuthenticated') && token) {
+            header.Authorization = `Basic ${token}`;
+        }
+
+        return header;
+    })
 
 });

@@ -1,6 +1,6 @@
-import DS from 'ember-data';
-
-const { Model, attr, hasMany } = DS;
+import Model from 'ember-data/model';
+import attr from 'ember-data/attr';
+import { hasMany } from 'ember-data/relationships';
 
 export default Model.extend({
     moodTime: attr('date'),
@@ -8,6 +8,6 @@ export default Model.extend({
     sadness: attr('number', { defaultValue: 0 }),
     worry: attr('number', { defaultValue: 0 }),
     behaviour: attr('string'), // use for situation
-    stressors: hasMany('stressor', { async: false }),
-    triggers: hasMany('trigger', { async: false })
+    moodTrigger: attr('string', { defaultValue: null }),
+    stressors: hasMany('stressor', { async: false })
 });

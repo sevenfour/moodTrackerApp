@@ -443,18 +443,56 @@ p {
 
 /* Update notification toast styles - START - --------------------------------------------------- */
 
+.toast-message,
 .toast-update-ready {
     position: absolute;
-    top: 4.779em;
+    bottom: 0;
     visibility: hidden;
+    padding-bottom: 5px;
+    width: 100%;
+    text-align: center;
+
+    .message-text {
+        color: $cement-grey;
+        font-family: 'Uniform Rounded Light';
+    }
+
+    .btn {
+        padding: 0;
+        width: 100px;
+    }
+}
+
+.toast-update-ready {
     background-color: $bright-green;
 
     &.update-ready {
         visibility: visible;
     }
 
-    .message-text {
-        color: $cement-grey;
+    .btn-discouraged {
+        margin-right: 15px;
+    }
+}
+
+.toast-message {
+    padding-right: 5px;
+    padding-left: 5px;
+
+    &.show-message {
+        visibility: visible;
+    }
+
+    &.error {
+        background-color: $pastel-red;
+    }
+
+    &.success {
+        background-color: $bright-green;
+    }
+
+    &.hide-message {
+        visibility: hidden;
     }
 }
 

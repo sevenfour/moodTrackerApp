@@ -40,7 +40,8 @@ export default {
         '2': 'Thought',
         '3': 'Feeling',
         '4': 'Behaviour',
-        '5': 'Sensation'
+        '5': 'Sensation',
+        '6': 'Not sure'
     },
 
     'serverError': {
@@ -59,7 +60,8 @@ export default {
         'dismiss': 'Dismiss',
         'reload': 'Reload',
         'save': 'Save',
-        'back': 'Back'
+        'back': 'Back',
+        'ok': 'OK'
     },
 
     /* Buttons - END - -------------------------------------------------------------------------- */
@@ -119,6 +121,9 @@ export default {
         },
         'noTriggersTitle': 'Sorry, no triggers are present.',
         'noStressorsTitle': 'Sorry, no stressors are present.',
+        'success': {
+            'goodWork': 'Good work on tracking your mood!'
+        },
         'error': {
             'charCountExceeds': 'Sorry, the maximum amount of characters allowed is {{MAX_CHARS}}.',
             'moodInFuture': 'Sorry, you cannot track moods in the future.',
