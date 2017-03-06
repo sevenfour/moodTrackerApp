@@ -1,3 +1,4 @@
+/* global toolbox */
 
 // Message handler
 self.onmessage = (event) => {
@@ -10,46 +11,92 @@ self.onmessage = (event) => {
     }
 };
 
-// NOTE: for testing login only!
-// self.addEventListener('fetch', (event) => {
-//     'use strict';
-//
-//     let requestURL = new URL(event.request.url);
-//
-//     if (requestURL.origin === location.origin) {
-//         if (requestURL.pathname.endsWith('/mobile/api/auth/mlogin')) {
-//             const tokenResponse = {
-//                 token: 'b5c856213288d6045fccc8bdb842db227841e29c326a93f08a617d0a8cb7c6a8'
-//             };
-//
-//             event.respondWith(
-//                 new Response(JSON.stringify(tokenResponse),
-//                     {
-//                         headers: {'Content-Type': 'application/json'}
-//                     }
-//                 )
-//             );
-//         }
-//     }
-// });
-//
-// self.addEventListener('fetch', (event) => {
-//     'use strict';
-//
-//     let requestURL = new URL(event.request.url);
-//
-//     if (requestURL.origin === location.origin) {
-//         if (requestURL.pathname.endsWith('/api/auth/logout')) {
-//             const logutResponse = {
-//                 'logout': 'Successfully logged out!'
-//             };
-//             event.respondWith(
-//                 new Response(JSON.stringify(logutResponse),
-//                     {
-//                         headers: {'Content-Type': 'application/json'}
-//                     }
-//                 )
-//             );
-//         }
-//     }
-// });
+const swUtilsObj = {
+
+    staleWhileRevalidateURLs: [
+        '/mobile/api/users/id',
+        '/mobile/api/organizations/id/configs/id'
+    ],
+
+    logOutURL: '/mobile/api/auth/logout',
+
+    getCacheName() {
+        'use strict';
+
+        return toolbox.options.cache.name;
+    },
+
+    processStaleWhileRevalidateURLs(event) {
+        'use strict';
+
+        const cacheName = this.getCacheName();
+
+        event.respondWith(
+            caches.open(cacheName).then((cache) => {
+                const request = event.request;
+
+                return cache.match(request).then((response) => {
+                    const fetchPromise = fetch(request).then((networkResponse) => {
+                        cache.put(request, networkResponse.clone());
+
+                        return networkResponse;
+                    });
+
+                    return response || fetchPromise;
+                });
+            })
+        );
+    },
+
+    processLogout(event) {
+        'use strict';
+
+        const cacheName = this.getCacheName();
+
+        event.respondWith(
+            caches.open(cacheName).then((cache) => {
+                this.staleWhileRevalidateURLs.forEach((url) => {
+                    const request = new Request(url);
+
+                    cache.match(request).then((response) => {
+                        if (response) {
+                            cache.delete(response);
+                        }
+                    });
+                });
+
+                return fetch(event.request).then((networkResponse) => {
+                    return networkResponse;
+                });
+            })
+        );
+    },
+
+    processGET(event) {
+        'use strict';
+
+        const requestURL = new URL(event.request.url);
+
+        if (requestURL.origin === location.origin) {
+            if (this.staleWhileRevalidateURLs.some((url) => {
+                return url === requestURL.pathname;
+            })) {
+                return this.processStaleWhileRevalidateURLs(event);
+            } else if (requestURL.pathname === this.logOutURL) {
+                return this.processLogout(event);
+            }
+        }
+    }
+
+};
+
+// GET event listener for stale-while-revalidate
+self.addEventListener('fetch', (event) => {
+    'use strict';
+
+    const requestMethod = event.request.method;
+
+    if (requestMethod === 'GET') {
+        swUtilsObj.processGET(event);
+    }
+});

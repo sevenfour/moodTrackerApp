@@ -52,7 +52,7 @@ module.exports = function(environment) {
             'manifest.appcache'
         ],
         swIncludeFiles: [
-            // 'node_modules/pouchdb/dist/pouchdb.js'
+            'node_modules/pouchdb/dist/pouchdb.js'
         ],
     };
 
