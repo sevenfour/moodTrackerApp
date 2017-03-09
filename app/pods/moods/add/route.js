@@ -76,7 +76,7 @@ export default Route.extend(ResetScrollMixin, {
         'use strict';
 
         let radio = [...document.querySelectorAll(`${radioClass}`)].find((radio) => {
-            radio.checked;
+            return radio.checked;
         });
 
         if (radio) {
@@ -146,7 +146,7 @@ export default Route.extend(ResetScrollMixin, {
                     if (reason) {
                         let error = null;
 
-                        if (reason.errors.moodTime) {
+                        if (reason.errors && reason.errors.moodTime) {
                             // Duplicate mood timestamp
                             error = 'moodTracker.error.duplicateMood';
                         } else {

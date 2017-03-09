@@ -60,6 +60,9 @@ module.exports = function(environment) {
         baseURL: '/'
     };
 
+    ENV.local_couch = 'moodTracker';
+    ENV.remote_couch = false;
+
     if (environment === 'development') {
         ENV.APP.LOG_TRANSITIONS = true;
         // ENV.APP.LOG_RESOLVER = true;

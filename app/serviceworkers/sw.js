@@ -13,6 +13,8 @@ self.onmessage = (event) => {
 
 const swUtilsObj = {
 
+    db: null,
+
     staleWhileRevalidateURLs: [
         '/mobile/api/users/id',
         '/mobile/api/organizations/id/configs/id'
@@ -43,6 +45,7 @@ const swUtilsObj = {
                     });
 
                     return response || fetchPromise;
+                    // return fetchPromise;
                 });
             })
         );

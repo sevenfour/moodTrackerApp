@@ -1,6 +1,7 @@
 import DS from 'ember-data';
+import { Serializer } from 'ember-pouch';
 
-const { JSONSerializer, EmbeddedRecordsMixin } = DS;
+const { EmbeddedRecordsMixin } = DS;
 
-export default JSONSerializer.extend(EmbeddedRecordsMixin, {
+export default Serializer.extend(EmbeddedRecordsMixin, {
 });

@@ -94,6 +94,8 @@ export default Route.extend(ApplicationRouteMixin, {
                     } else if (response.status === 401) {
                         if (transition) {
                             transition.send('invalidateSession');
+                        } else {
+                            this.send('invalidateSession');
                         }
                     }
                 })
@@ -126,6 +128,8 @@ export default Route.extend(ApplicationRouteMixin, {
                     } else if (response.status === 401) {
                       if (transition) {
                           transition.send('invalidateSession');
+                      } else {
+                          this.send('invalidateSession');
                       }
                     }
                 })
