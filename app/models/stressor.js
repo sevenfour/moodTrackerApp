@@ -1,6 +1,4 @@
-// import Model from 'ember-data/model';
 import computed from 'ember-computed';
-
 import { Model } from 'ember-pouch';
 
 export default Model.extend({

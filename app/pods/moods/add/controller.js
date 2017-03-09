@@ -87,6 +87,22 @@ export default Controller.extend({
         return showBehaviourError;
     }),
 
+    showMoodDateTimeError: computed('isMoodInFuture', function() {
+        'use strict';
+
+        let showMoodDateTimeError = false;
+
+        if (this.get('isMoodInFuture')) {
+            this.set('error.moodDateTime', 'moodTracker.error.moodInFuture');
+
+            showMoodDateTimeError = true;
+        } else {
+            this.set('error.moodDateTime', '');
+        }
+
+        return showMoodDateTimeError;
+    }),
+
     timeDefault: computed(function() {
         'use strict';
 

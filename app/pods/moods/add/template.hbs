@@ -109,6 +109,11 @@
                 locale=i18n.locale
                 timePickerContainer='.time-picker-outlet'}}
         </div>
+        {{#liquid-spacer class='error-holder'}}
+            {{#if showMoodDateTimeError}}
+                <p class="text-danger">{{t error.moodDateTime}}</p>
+            {{/if}}
+        {{/liquid-spacer}}
         {{textarea
             value=model.mood.behaviour
             class='textarea'

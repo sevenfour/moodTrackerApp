@@ -1,8 +1,5 @@
-// import Model from 'ember-data/model';
-
-import { Model } from 'ember-pouch';
-
 import attr from 'ember-data/attr';
+import { Model } from 'ember-pouch';
 import { hasMany } from 'ember-data/relationships';
 
 export default Model.extend({

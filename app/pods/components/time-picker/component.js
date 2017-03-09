@@ -38,7 +38,7 @@ export default Component.extend({
         const defaults = this.get('defaults');
 
         const picker = self.$().pickatime({
-            format: 'h:i a',
+            format: 'H:i',
             interval: this.interval,
             max: this.max,
             clear: defaults.clear,
