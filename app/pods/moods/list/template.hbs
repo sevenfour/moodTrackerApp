@@ -2,4 +2,46 @@
     <h2 class="page-section-title">
         {{t 'moodHistory.title'}}
     </h2>
+    {{#each moods as |mood|}}
+        <div class="col-xs-4 col-sm-4 col-md-4 no-padding-left-right">
+            <input type="checkbox" id="{{mood.emotion}}" class="mood-emotion-checkbox"
+                name={{mood.emotion}} value={{mood.emotion}} aria-label={{mood.emotion}}>
+            <label for="{{mood.emotion}}" class="mood-checkbox-label {{mood.emotion}}">
+            </label>
+            <label for="{{mood.emotion}}" class="mood-checkbox-label-presentation">
+                {{t mood.emotionToDisplay}}
+            </label>
+        </div>
+    {{/each}}
+    {{#each model.moodList as |mood|}}
+        <p>
+            {{mood.moodTime}}
+        </p>
+        <p>
+            {{mood.behaviour}}
+        </p>
+        <div class="col-xs-4 col-sm-4 col-md-4">
+            <p>
+                {{mood.worry}}
+            </p>
+        </div>
+        <div class="col-xs-4 col-sm-4 col-md-4">
+            <p>
+                {{mood.anxiety}}
+            </p>
+        </div>
+        <div class="col-xs-4 col-sm-4 col-md-4">
+            <p>
+                {{mood.sadness}}
+            </p>
+        </div>
+    {{/each}}
+    <div class="btn-holder col-xs-12 col-sm-12 col-md-12 text-center">
+        {{#link-to 'my-starling' type='button' class='btn btn-discouraged'}}
+            {{t 'btns.back'}}
+        {{/link-to}}
+        {{#link-to 'moods.add' type='button' class='btn'}}
+            {{t 'btns.track'}}
+        {{/link-to}}
+    </div>
 </div>

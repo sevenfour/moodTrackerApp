@@ -16,6 +16,12 @@ export default {
         'worried': 'Inquiet' // *
     },
 
+    'moods': {
+        'sadness': 'Triste-Joyeux',
+        'anxiety': 'Anxieux-Détendu',
+        'worry': 'Inquiet-Calme'
+    },
+
     'stressor': {
         '1': 'Travail', // *
         '2': 'Relations', // *
@@ -62,6 +68,7 @@ export default {
         'reload': 'Reload - Fr -',
         'save': 'Sauvegarder', // *
         'back': 'Retour', // *
+        'track': 'Track - Fr -',
         'ok': 'OK - Fr -'
     },
 
@@ -140,7 +147,7 @@ export default {
     /* Mood History page - START - -------------------------------------------------------------- */
 
     'moodHistory': {
-        'title': 'Historique des humeurs' // *
+        'title': 'Great job - Fr -' // *
     },
 
     /* Mood History page - END - ---------------------------------------------------------------- */

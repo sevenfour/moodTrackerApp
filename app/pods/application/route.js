@@ -30,6 +30,7 @@ export default Route.extend(ApplicationRouteMixin, {
 
         let user = null;
         let config = null;
+        let moods = null;
 
         if (this.get('isAuthenticated')) {
             const store = this.get('store');
@@ -48,11 +49,13 @@ export default Route.extend(ApplicationRouteMixin, {
                 .then((config) => {
                     return config;
                 });
+            moods = this.getMoods();
         }
 
         return RSVP.hash({
             user,
-            config
+            config,
+            moods
         });
     },
 
@@ -155,6 +158,31 @@ export default Route.extend(ApplicationRouteMixin, {
         });
     },
 
+    getMoods() {
+        'use strict';
+
+        return this.store.adapterFor('application').get('db')
+            .find({
+                selector: {
+                    _id: { $gt: '' }
+                },
+                sort: ['_id']
+            })
+            .then((result) => {
+                if (result && result.docs) {
+                    const moodsArray = result.docs.map((doc) => {
+                        doc.data.id = doc._id.replace(/\w+_/, '');
+                        return doc.data;
+                    });
+                    const moodRecords = {
+                        'moods': moodsArray
+                    };
+
+                    this.store.pushPayload('mood', moodRecords);
+                }
+            });
+    },
+
     saveUserData(data) {
         'use strict';
 
@@ -215,17 +243,20 @@ export default Route.extend(ApplicationRouteMixin, {
             return new RSVP.Promise((resolve, reject) => {
                 this.get('session').authenticate('authenticator:custom', credentials)
                     .then(() => {
-                        this.getUser(null, userURL, token, store)
-                            .then((user) => {
-                                set(this.currentModel, 'user', user);
+                        this.getUser(null, userURL, token, store);
+                    })
+                    .then((user) => {
+                        set(this.currentModel, 'user', user);
 
-                                this.getConfig(null, configURL, token, store)
-                                    .then((config) => {
-                                        set(this.currentModel, 'config', config);
+                        this.getConfig(null, configURL, token, store);
+                    })
+                    .then((config) => {
+                        set(this.currentModel, 'config', config);
 
-                                        resolve();
-                                    });
-                            });
+                        this.getMoods();
+                    })
+                    .then((moods) => {
+                        set(this.currentModel, 'moods', moods);
                     })
                     .catch((reason) => {
                         reject(reason);

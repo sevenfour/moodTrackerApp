@@ -290,4 +290,55 @@
     }
 }
 
+.mood-history-page {
+    .mood-emotion-checkbox {
+        position: absolute;
+        left: -9999px;
+
+        &:checked {
+            + .sadness {
+                background-color: $sadness;
+            }
+
+            + .anxiety {
+                background-color: $anxiety;
+            }
+
+            + .worry {
+                background-color: $worry;
+            }
+        }
+    }
+
+    .mood-checkbox-label {
+        $diameter: 15px;
+
+        @include square($diameter);
+
+        border: 3px solid;
+        border-radius: 50%;
+        cursor: pointer;
+
+        &.sadness {
+            border-color: $sadness;
+        }
+
+        &.anxiety {
+            border-color: $anxiety;
+        }
+
+        &.worry {
+            border-color: $worry;
+        }
+    }
+
+    .mood-checkbox-label-presentation {
+        display: block;
+        line-height: 1.167em;
+        color: $true-blue;
+        font-family: 'Uniform Rounded Regular';
+        font-size: $font-size-small;
+    }
+}
+
 /* Pages styles - END - ------------------------------------------------------------------------- */

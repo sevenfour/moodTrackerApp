@@ -16,6 +16,12 @@ export default {
         'worried': 'Worried'
     },
 
+    'moods': {
+        'sadness': 'Sad-Happy',
+        'anxiety': 'Anxious-Relaxed',
+        'worry': 'Worried-Calm'
+    },
+
     'stressor': {
         '1': 'Work',
         '2': 'Relationships',
@@ -61,6 +67,7 @@ export default {
         'reload': 'Reload',
         'save': 'Save',
         'back': 'Back',
+        'track': 'Track',
         'ok': 'OK'
     },
 
@@ -138,7 +145,7 @@ export default {
     /* Mood History page - START - -------------------------------------------------------------- */
 
     'moodHistory': {
-        'title': 'Mood History'
+        'title': 'Great job'
     },
 
     /* Mood History page - END - ---------------------------------------------------------------- */
