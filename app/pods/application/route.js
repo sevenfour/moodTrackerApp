@@ -161,18 +161,18 @@ export default Route.extend(ApplicationRouteMixin, {
     getMoods() {
         'use strict';
 
-        return this.store.adapterFor('application').get('db')
-            .find({
-                selector: {
-                    _id: { $gt: '' }
-                },
-                sort: ['_id']
+        const db = this.store.adapterFor('application').get('db');
+
+        return db.allDocs({
+            include_docs: true,    // eslint-disable-line camelcase
+            startkey: 'mood',
+            endkey: 'mood\uffff'
             })
             .then((result) => {
-                if (result && result.docs) {
-                    const moodsArray = result.docs.map((doc) => {
-                        doc.data.id = doc._id.replace(/\w+_/, '');
-                        return doc.data;
+                if (result && result.rows) {
+                    const moodsArray = result.rows.map((row) => {
+                        row.doc.data.id = row.doc._id.replace(/\w+_/, '');
+                        return row.doc.data;
                     });
                     const moodRecords = {
                         'moods': moodsArray
