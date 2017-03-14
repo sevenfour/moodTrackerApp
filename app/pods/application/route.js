@@ -41,13 +41,13 @@ export default Route.extend(ApplicationRouteMixin, {
             const userURL = store.adapterFor('user').get('namespace');  // same as user namespace
             const configURL = `${configNamespace}/configs/id`;
 
-            user = this.getUser(transition, userURL, token, store)
-                .then((user) => {
-                    return user;
+            user = this.getUser(transition, userURL, token)
+                .then((result) => {
+                    return this.createUserRecord(result, result.locale, store);
                 });
             config = this.getConfig(transition, configURL, token, store)
-                .then((config) => {
-                    return config;
+                .then((result) => {
+                    return this.createConfigRecord(result, store);
                 });
             moods = this.getMoods();
         }
@@ -78,11 +78,8 @@ export default Route.extend(ApplicationRouteMixin, {
         return this.get('i18n').t('document.title');
     },
 
-    getUser(transition, userURL, token, store) {
+    getUser(transition, userURL, token) {
         'use strict';
-
-        let user = null;
-        let locale = null;
 
         return new RSVP.Promise((resolve) => {
             fetch(userURL, {
@@ -103,20 +100,13 @@ export default Route.extend(ApplicationRouteMixin, {
                     }
                 })
                 .then((result) => {
-                    user = store.createRecord('user', result);
-                    locale = store.createRecord('locale', result.locale);
-
-                    user.set('locale', locale);
-
-                    resolve(user);
+                    resolve(result);
                 });
         });
     },
 
-    getConfig(transition, configURL, token, store) {
+    getConfig(transition, configURL, token) {
         'use strict';
-
-        let config;
 
         return new RSVP.Promise((resolve) => {
             fetch(configURL, {
@@ -137,25 +127,42 @@ export default Route.extend(ApplicationRouteMixin, {
                     }
                 })
                 .then((result) => {
-                    config = store.createRecord('config', {
-                        id: result.id,
-                        code: result.code
-                    });
-
-                    result.stressorTypes.forEach((stressorObj) => {
-                        store.createRecord('stressor', stressorObj);
-                    });
-
-                    this.get('triggers').forEach((triggerObj) => {
-                        store.createRecord('trigger', triggerObj);
-                    });
-
-                    config.set('stressorTypes', store.peekAll('stressor'));
-                    config.set('triggerTypes', store.peekAll('trigger'));
-
-                    resolve(config);
+                    resolve(result);
                 });
         });
+    },
+
+    createUserRecord(userObj, localeObj, store) {
+        'use strict';
+
+        let user = store.createRecord('user', userObj);
+        let locale = store.createRecord('locale', localeObj);
+
+        user.set('locale', locale);
+
+        return user;
+    },
+
+    createConfigRecord(configObj, store) {
+        'use strict';
+
+        let config = store.createRecord('config', {
+            id: configObj.id,
+            code: configObj.code
+        });
+
+        configObj.stressorTypes.forEach((stressorObj) => {
+            store.createRecord('stressor', stressorObj);
+        });
+
+        this.get('triggers').forEach((triggerObj) => {
+            store.createRecord('trigger', triggerObj);
+        });
+
+        config.set('stressorTypes', store.peekAll('stressor'));
+        config.set('triggerTypes', store.peekAll('trigger'));
+
+        return config;
     },
 
     getMoods() {
@@ -181,6 +188,35 @@ export default Route.extend(ApplicationRouteMixin, {
                     this.store.pushPayload('mood', moodRecords);
                 }
             });
+    },
+
+    fetchMoods(moodsURL, token) {
+        'use strict';
+
+        return new RSVP.Promise((resolve) => {
+            fetch(moodsURL, {
+                method: 'GET',
+                headers: {
+                  'Authorization': `Basic ${token}`
+                }
+                })
+                .then((response) => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        this.send('invalidateSession');
+                    }
+                })
+                .then((result) => {
+                    resolve(result);
+                });
+        });
+    },
+
+    saveMoodsIntoDB(moods) {
+        'use strict';
+
+        const db = this.store.adapterFor('application').get('db');
     },
 
     saveUserData(data) {
@@ -240,23 +276,36 @@ export default Route.extend(ApplicationRouteMixin, {
             const userURL = store.adapterFor('user').get('namespace');  // same as user namespace
             const configURL = `${configNamespace}/configs/id`;
 
+            let moodsURL = store.adapterFor('mood').get('namespace');
+
+            if (!/moods/.test(moodsURL)) {
+                moodsURL += '/moods';
+            }
+
+            console.log('moodsURL: ', moodsURL);
+
             return new RSVP.Promise((resolve, reject) => {
                 this.get('session').authenticate('authenticator:custom', credentials)
                     .then(() => {
-                        this.getUser(null, userURL, token, store);
+                        return this.getUser(null, userURL, token);
                     })
-                    .then((user) => {
+                    .then((result) => {
+                        const user = this.createUserRecord(result, result.locale, store);
+
                         set(this.currentModel, 'user', user);
 
-                        this.getConfig(null, configURL, token, store);
+                        return this.getConfig(null, configURL, token);
                     })
-                    .then((config) => {
+                    .then((result) => {
+                        const config = this.createConfigRecord(result, store);
+
                         set(this.currentModel, 'config', config);
 
-                        this.getMoods();
+                        return this.fetchMoods(moodsURL, token);
                     })
                     .then((moods) => {
-                        set(this.currentModel, 'moods', moods);
+                        // Load moods into PouchDB
+                        this.saveMoodsIntoDB(moods);
                     })
                     .catch((reason) => {
                         reject(reason);
