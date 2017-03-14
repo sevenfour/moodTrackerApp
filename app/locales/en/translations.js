@@ -16,12 +16,6 @@ export default {
         'worried': 'Worried'
     },
 
-    'moods': {
-        'sadness': 'Sad-Happy',
-        'anxiety': 'Anxious-Relaxed',
-        'worry': 'Worried-Calm'
-    },
-
     'stressor': {
         '1': 'Work',
         '2': 'Relationships',

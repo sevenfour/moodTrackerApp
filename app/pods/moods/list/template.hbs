@@ -9,7 +9,7 @@
             <label for="{{mood.emotion}}" class="mood-checkbox-label {{mood.emotion}}">
             </label>
             <label for="{{mood.emotion}}" class="mood-checkbox-label-presentation">
-                {{t mood.emotionToDisplay}}
+                {{t (concat 'emotions.' mood.low)}}-{{t (concat 'emotions.' mood.high)}}
             </label>
         </div>
     {{/each}}
