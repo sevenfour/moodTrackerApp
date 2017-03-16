@@ -83,11 +83,7 @@ const swUtilsObj = {
                 this.staleWhileRevalidateURLs.forEach((url) => {
                     const request = new Request(url);
 
-                    cache.match(request).then((response) => {
-                        if (response) {
-                            cache.delete(response);
-                        }
-                    });
+                    cache.delete(request);
                 });
 
                 return fetch(event.request).then((networkResponse) => {
