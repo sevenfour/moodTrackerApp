@@ -4,7 +4,10 @@ import service from 'ember-service/inject';
 import set from 'ember-metal/set';
 import { alias } from 'ember-computed';
 import fetch from 'ember-network/fetch';
+import debug from 'ember-debug';
 import ApplicationRouteMixin from 'ember-simple-auth/mixins/application-route-mixin';
+
+const { log } = debug;
 
 export default Route.extend(ApplicationRouteMixin, {
 
@@ -49,7 +52,12 @@ export default Route.extend(ApplicationRouteMixin, {
                 .then((result) => {
                     return this.createConfigRecord(result, store);
                 });
-            moods = this.getMoods();
+            moods = this.getMoods()
+                .then((result) => {
+                    if (result && result.rows.length > 0) {
+                        return this.createMoodRecords(result.rows, store);
+                    }
+                });
         }
 
         return RSVP.hash({
@@ -132,6 +140,43 @@ export default Route.extend(ApplicationRouteMixin, {
         });
     },
 
+    getMoods() {
+        'use strict';
+
+        const db = this.store.adapterFor('application').get('db');
+
+        if (db) {
+            return db.allDocs({
+                startkey: 'mood_',
+                endkey: 'mood_\uffff',
+                include_docs: true    // eslint-disable-line camelcase
+            });
+        }
+    },
+
+    fetchMoods(moodsURL, token) {
+        'use strict';
+
+        return new RSVP.Promise((resolve) => {
+            fetch(moodsURL, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Basic ${token}`
+                }
+                })
+                .then((response) => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        this.send('invalidateSession');
+                    }
+                })
+                .then((result) => {
+                    resolve(result);
+                });
+        });
+    },
+
     createUserRecord(userObj, localeObj, store) {
         'use strict';
 
@@ -165,58 +210,61 @@ export default Route.extend(ApplicationRouteMixin, {
         return config;
     },
 
-    getMoods() {
+    createMoodRecords(moodObjects, store) {
         'use strict';
 
-        const db = this.store.adapterFor('application').get('db');
-
-        return db.allDocs({
-            include_docs: true,    // eslint-disable-line camelcase
-            startkey: 'mood',
-            endkey: 'mood\uffff'
-            })
-            .then((result) => {
-                if (result && result.rows) {
-                    const moodsArray = result.rows.map((row) => {
-                        row.doc.data.id = row.doc._id.replace(/\w+_/, '');
-                        return row.doc.data;
-                    });
-                    const moodRecords = {
-                        'moods': moodsArray
-                    };
-
-                    this.store.pushPayload('mood', moodRecords);
-                }
-            });
-    },
-
-    fetchMoods(moodsURL, token) {
-        'use strict';
-
-        return new RSVP.Promise((resolve) => {
-            fetch(moodsURL, {
-                method: 'GET',
-                headers: {
-                  'Authorization': `Basic ${token}`
-                }
-                })
-                .then((response) => {
-                    if (response.ok) {
-                        return response.json();
-                    } else {
-                        this.send('invalidateSession');
-                    }
-                })
-                .then((result) => {
-                    resolve(result);
-                });
+        const areObjectsFromPouch = moodObjects.any((obj) => {
+            return obj.doc;
         });
+
+        let moodsArray;
+
+        if (areObjectsFromPouch) {
+            // moodObjects came from PouchDB
+            moodsArray = moodObjects.map((obj) => {
+                if (obj.doc.data) {
+                    obj.doc.data.id = obj.doc._id.replace(/\w+_/, '');
+                    return obj.doc.data;
+                }
+
+                return obj.doc;
+            });
+        }
+
+        const moodRecords = {
+            'moods': moodsArray || moodObjects
+        };
+
+        store.pushPayload('mood', moodRecords);
     },
 
     saveMoodsIntoDB(moods) {
         'use strict';
 
-        const db = this.store.adapterFor('application').get('db');
+        const store = this.get('store');
+        const db = store.adapterFor('application').get('db');
+
+        // Check local PouchDB for mood docs
+        this.getMoods()
+            .then((result) => {
+                if (result && result.rows.length > 0) {
+                    // There are moods saved locally
+                    log('There are moods saved locally.');
+                } else {
+                    // No moods are saved locally
+                    if (db) {
+                        // NOTE: for testing purposes only generate _id field
+                        const modifiedMoods = moods.map((mood) => {
+                            mood._id = `mood_${mood.id}`;
+                            return mood;
+                        });
+
+                        db.bulkDocs(modifiedMoods);
+                    }
+
+                    this.createMoodRecords(moods, store);
+                }
+            });
     },
 
     saveUserData(data) {
@@ -227,6 +275,12 @@ export default Route.extend(ApplicationRouteMixin, {
         });
 
         return RSVP.all(promises);
+    },
+
+    reloadRoute() {
+        'use strict';
+
+        window.location.reload();
     },
 
     actions: {
@@ -247,7 +301,10 @@ export default Route.extend(ApplicationRouteMixin, {
         switchLanguage() {
             'use strict';
 
-            const locale = this.modelFor(this.routeName).user.get('locale');
+            const token = this.get('session.data.authenticated.token');
+            const localeURL = this.get('store').adapterFor('locale').get('namespace');
+
+            let locale = this.modelFor(this.routeName).user.get('locale');
 
             if (this.get('i18n.locale') === 'fr') {
                 locale.set('language', 'en');
@@ -255,14 +312,29 @@ export default Route.extend(ApplicationRouteMixin, {
                 locale.set('language', 'fr');
             }
 
+            let localeHash = locale.serialize();
+
             // i18n.locale will be set in afterModel after the refresh
-            locale.save().then(() => {
-                // force view to re-render (re-fires all the route hooks)
-                this.refresh();
-            }).catch(() => {
-                // NOTE: since locale.save() would fail without a server, refresh the view anyway
-                this.refresh();
-            });
+            fetch(localeURL, {
+                method: 'PUT',
+                headers: {
+                    'data-type': 'json',
+                    'content-type': 'application/json',
+                    'Authorization': `Basic ${token}`
+                },
+                body: JSON.stringify(localeHash)
+                })
+                .then((response) => {
+                    if (response.ok) {
+                        this.reloadRoute();
+                    }
+                })
+                .catch(() => {
+                      /* NOTE: since locale.save() would fail without a server,
+                       * refresh the view anyway
+                      */
+                      this.reloadRoute();
+                });
         },
 
         authenticate(credentials) {
@@ -281,8 +353,6 @@ export default Route.extend(ApplicationRouteMixin, {
             if (!/moods/.test(moodsURL)) {
                 moodsURL += '/moods';
             }
-
-            console.log('moodsURL: ', moodsURL);
 
             return new RSVP.Promise((resolve, reject) => {
                 this.get('session').authenticate('authenticator:custom', credentials)

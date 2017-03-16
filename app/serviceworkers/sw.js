@@ -13,12 +13,12 @@ self.onmessage = (event) => {
 
 const swUtilsObj = {
 
-    db: null,
-
     staleWhileRevalidateURLs: [
         '/mobile/api/users/id',
         '/mobile/api/organizations/id/configs/id'
     ],
+
+    localeURL: '/mobile/api/users/id/locales/id',
 
     logOutURL: '/mobile/api/auth/logout',
 
@@ -46,6 +46,28 @@ const swUtilsObj = {
 
                     return response || fetchPromise;
                     // return fetchPromise;
+                });
+            })
+        );
+    },
+
+    processLocaleChange(event) {
+        'use strict';
+
+        const cacheName = this.getCacheName();
+
+        event.respondWith(
+            caches.open(cacheName).then((cache) => {
+                const userURL = this.staleWhileRevalidateURLs.find((url) => {
+                    return url.indexOf('users') !== -1;
+                });
+                const userRequest = new Request(userURL);
+
+                // Clear user request from cache in order to load fresh data from the network
+                return cache.delete(userRequest).then(() => {
+                    return fetch(event.request).then((networkResponse) => {
+                        return networkResponse;
+                    });
                 });
             })
         );
@@ -81,12 +103,25 @@ const swUtilsObj = {
         const requestURL = new URL(event.request.url);
 
         if (requestURL.origin === location.origin) {
+            const pathname = requestURL.pathname;
             if (this.staleWhileRevalidateURLs.some((url) => {
-                return url === requestURL.pathname;
+                return url === pathname;
             })) {
                 return this.processStaleWhileRevalidateURLs(event);
-            } else if (requestURL.pathname === this.logOutURL) {
+            } else if (pathname === this.logOutURL) {
                 return this.processLogout(event);
+            }
+        }
+    },
+
+    processPUT(event) {
+        'use strict';
+
+        const requestURL = new URL(event.request.url);
+
+        if (requestURL.origin === location.origin) {
+            if (requestURL.pathname === this.localeURL) {
+                return this.processLocaleChange(event);
             }
         }
     }
@@ -101,5 +136,7 @@ self.addEventListener('fetch', (event) => {
 
     if (requestMethod === 'GET') {
         swUtilsObj.processGET(event);
+    } else if (requestMethod === 'PUT') {
+        swUtilsObj.processPUT(event);
     }
 });
