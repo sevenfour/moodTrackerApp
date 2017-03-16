@@ -45,7 +45,6 @@ const swUtilsObj = {
                     });
 
                     return response || fetchPromise;
-                    // return fetchPromise;
                 });
             })
         );
@@ -62,12 +61,38 @@ const swUtilsObj = {
                     return url.indexOf('users') !== -1;
                 });
                 const userRequest = new Request(userURL);
+                const requestToRead = event.request.clone();
+                const localeFetch = fetch(event.request).then((networkResponse) => {
+                    return networkResponse;
+                });
 
-                // Clear user request from cache in order to load fresh data from the network
-                return cache.delete(userRequest).then(() => {
-                    return fetch(event.request).then((networkResponse) => {
-                        return networkResponse;
-                    });
+                // Search and update .../users/id entry in the cache, then fetch locale change
+                return cache.match(userRequest).then((response) => {
+                    if (response) {
+                        const responseToRead = response.clone();
+
+                        return requestToRead.json().then((data) => {
+                            const newLocale = data.language;
+
+                            return responseToRead.json().then((data) => {
+                                  data.locale.language = newLocale;
+
+                                  const updatedUserResponse = new Response(JSON.stringify(data), {
+                                      'status': 200,
+                                      'statusText': 'OK',
+                                      headers: {
+                                          'content-type': 'application/json'
+                                      }
+                                  });
+
+                                  return cache.put(userRequest, updatedUserResponse).then(() => {
+                                      return localeFetch;
+                                  });
+                            });
+                        });
+                    } else {
+                        return localeFetch;
+                    }
                 });
             })
         );
