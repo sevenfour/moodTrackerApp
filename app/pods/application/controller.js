@@ -7,6 +7,8 @@ export default Controller.extend({
 
     errorMessage: null,
 
-    successMessage: null
+    successMessage: null,
+
+    isSaving: false
 
 });

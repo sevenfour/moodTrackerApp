@@ -134,6 +134,8 @@ export default Route.extend(ResetScrollMixin, {
 
             moodRecord.set('moodTime', this.controllerFor('moods.add').get('moodDateTimeUTC'));
 
+            moodRecord.set('isSynced', false);
+
             moodRecord.save()
                 .then(() => {
                     this.controllerFor('application').set('errorMessage', null);

@@ -20,7 +20,11 @@
     </li>
     <li class="navbar-drawer-item">
         <button type="button" class="navbar-btn" {{action 'logout'}}>
-            {{t 'drawerMenu.logout'}}
+            {{#if isSaving}}
+                {{t 'dataSync.savingData'}}
+            {{else}}
+                {{t 'drawerMenu.logout'}}
+            {{/if}}
         </button>
     </li>
 </ul>

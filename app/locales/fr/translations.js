@@ -54,6 +54,14 @@ export default {
         'characters': 'Caractères' // *
     },
 
+    /* Data synchronization - START - ----------------------------------------------------------- */
+
+    'dataSync': {
+        'savingData': 'Saving data - Fr -'
+    },
+
+    /* Data synchronization - END - ------------------------------------------------------------- */
+
     /* Buttons - START - ------------------------------------------------------------------------ */
 
     'btns': {

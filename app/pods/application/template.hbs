@@ -8,8 +8,9 @@
         imgSource='logo'}}
     {{drawer-menu
         userFirstName=model.user.firstName
+        isSaving=isSaving
         switchLanguage=(route-action 'switchLanguage')
-        logout=(route-action 'invalidateSession')}}
+        logout=(route-action 'logout')}}
 {{else}}
     {{inline-svg 'logo' class='starling-logo on-login'}}
 {{/if}}

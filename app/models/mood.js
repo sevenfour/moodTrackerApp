@@ -9,5 +9,7 @@ export default Model.extend({
     worry: attr('number', { defaultValue: 0 }),
     behaviour: attr('string'), // use for situation
     moodTrigger: attr('string', { defaultValue: null }),
-    stressors: hasMany('stressor', { async: false })
+    stressors: hasMany('stressor', { async: false }),
+
+    isSynced: attr('boolean', { defaultValue: false }) // use as backend sync flag
 });

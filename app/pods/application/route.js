@@ -2,10 +2,12 @@ import Route from 'ember-route';
 import RSVP from 'rsvp';
 import service from 'ember-service/inject';
 import set from 'ember-metal/set';
+import computed from 'ember-computed';
 import { alias } from 'ember-computed';
 import fetch from 'ember-network/fetch';
 import debug from 'ember-debug';
 import ApplicationRouteMixin from 'ember-simple-auth/mixins/application-route-mixin';
+import { task, all } from 'ember-concurrency';
 
 const { log } = debug;
 
@@ -27,6 +29,18 @@ export default Route.extend(ApplicationRouteMixin, {
     routeAfterAuthentication: 'my-starling',
 
     isAuthenticated: alias('session.isAuthenticated'),
+
+    moodsURL: computed(function() {
+        'use strict';
+
+        let moodsURL = this.get('store').adapterFor('mood').get('namespace');
+
+        if (!/moods/.test(moodsURL)) {
+            moodsURL += '/moods';
+        }
+
+        return moodsURL;
+    }),
 
     model(params, transition) {
         'use strict';
@@ -101,9 +115,9 @@ export default Route.extend(ApplicationRouteMixin, {
                         return response.json();
                     } else if (response.status === 401) {
                         if (transition) {
-                            transition.send('invalidateSession');
+                            transition.send('logout');
                         } else {
-                            this.send('invalidateSession');
+                            this.send('logout');
                         }
                     }
                 })
@@ -128,9 +142,9 @@ export default Route.extend(ApplicationRouteMixin, {
                         return response.json();
                     } else if (response.status === 401) {
                       if (transition) {
-                          transition.send('invalidateSession');
+                          transition.send('logout');
                       } else {
-                          this.send('invalidateSession');
+                          this.send('logout');
                       }
                     }
                 })
@@ -154,6 +168,14 @@ export default Route.extend(ApplicationRouteMixin, {
         }
     },
 
+    getUnsyncedMoods() {
+        'use strict';
+
+        return this.store.query('mood', {
+            filter: { isSynced: false }
+        });
+    },
+
     fetchMoods(moodsURL, token) {
         'use strict';
 
@@ -168,12 +190,25 @@ export default Route.extend(ApplicationRouteMixin, {
                     if (response.ok) {
                         return response.json();
                     } else {
-                        this.send('invalidateSession');
+                        this.send('logout');
                     }
                 })
                 .then((result) => {
                     resolve(result);
                 });
+        });
+    },
+
+    postMood(moodsURL, moodHash, token) {
+        'use strict';
+
+        fetch(moodsURL, {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json',
+                'Authorization': `Basic ${token}`
+            },
+            body: JSON.stringify(moodHash)
         });
     },
 
@@ -244,38 +279,74 @@ export default Route.extend(ApplicationRouteMixin, {
         const store = this.get('store');
         const db = store.adapterFor('application').get('db');
 
-        // Check local PouchDB for mood docs
-        this.getMoods()
-            .then((result) => {
-                if (result && result.rows.length > 0) {
-                    // There are moods saved locally
-                    log('There are moods saved locally.');
-                } else {
-                    // No moods are saved locally
-                    if (db) {
-                        // NOTE: for testing purposes only generate _id field
-                        const modifiedMoods = moods.map((mood) => {
-                            mood._id = `mood_${mood.id}`;
-                            return mood;
-                        });
+        if (db) {
+            // NOTE: for testing purposes only generate _id field
+            const modifiedMoods = moods.map((mood) => {
+                mood._id = `mood_${mood.id}`;
+                mood.isSynced = true;
+                return mood;
+            });
 
-                        db.bulkDocs(modifiedMoods);
-                    }
+            db.bulkDocs(modifiedMoods);
+        }
 
-                    this.createMoodRecords(moods, store);
+        this.createMoodRecords(moods, store);
+    },
+
+    destroyDB() {
+        'use strict';
+
+        const db = this.get('store').adapterFor('application').get('db');
+
+        return db.destroy();
+    },
+
+    invalidateSession() {
+        'use strict';
+
+        this.get('session').invalidate();
+    },
+
+    destroyDBAndInvalidate() {
+        'use strict';
+
+        this.destroyDB()
+            .then(({ ok }) => {
+                if (ok) {
+                    this.invalidateSession();
                 }
+            })
+            .catch((err) => {
+                log(err);
             });
     },
 
-    saveUserData(data) {
+    saveMoodsData(moods) {
         'use strict';
 
-        const promises = this.store.peekAll(data).filterBy('hasDirtyAttributes').map((datum) => {
-            return datum.save();
+        const moodsURL = this.get('moodsURL');
+        const token = this.get('session.data.authenticated.token');
+
+        return moods.map((mood) => {
+            let moodHash = mood.serialize();
+
+            // Remove non-persistent attributes
+            delete moodHash.isSynced;
+            delete moodHash.rev;
+
+            return this.postMood(moodsURL, moodHash, token);
         });
 
-        return RSVP.all(promises);
     },
+
+    saveMoodsAndInvalidateTask: task(function* (moods) {
+        'use strict';
+
+        // TODO: implement scenario when saveMoodsData fails
+        yield all(this.saveMoodsData(moods));
+
+        this.destroyDBAndInvalidate();
+    }).drop(),
 
     reloadRoute() {
         'use strict';
@@ -348,11 +419,7 @@ export default Route.extend(ApplicationRouteMixin, {
             const userURL = store.adapterFor('user').get('namespace');  // same as user namespace
             const configURL = `${configNamespace}/configs/id`;
 
-            let moodsURL = store.adapterFor('mood').get('namespace');
-
-            if (!/moods/.test(moodsURL)) {
-                moodsURL += '/moods';
-            }
+            const moodsURL = this.get('moodsURL');
 
             return new RSVP.Promise((resolve, reject) => {
                 this.get('session').authenticate('authenticator:custom', credentials)
@@ -383,10 +450,21 @@ export default Route.extend(ApplicationRouteMixin, {
             });
         },
 
-        invalidateSession() {
+        logout() {
             'use strict';
 
-            this.get('session').invalidate();
+            this.getUnsyncedMoods().then((moods) => {
+                if (moods.get('length') === 0) {
+                    // All records have been synced; proceed with logout
+                    this.destroyDBAndInvalidate();
+                } else {
+                    // Notify the data sync has began
+                    this.controllerFor(this.routeName).set('isSaving', true);
+
+                    // Sync records first; then, proceed with logout
+                    this.get('saveMoodsAndInvalidateTask').perform(moods);
+                }
+            });
         },
 
         error(error, transition) {
