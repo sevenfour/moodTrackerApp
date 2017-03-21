@@ -35,9 +35,10 @@ export default Adapter.extend({
         this._super(...arguments);
 
         const db = this.createDB();
-        const dbWithSyncIndex = this.createSyncIndex(db);
+        const dbWithSyncIndex = this.createSyncIndex(db) || db;
+        const dbWithMoodTimeIndex = this.createMoodTimeIndex(dbWithSyncIndex) || db;
 
-        this.set('db', dbWithSyncIndex || db);
+        this.set('db', dbWithMoodTimeIndex);
 
         /*
          * If we have specified a remote CouchDB instance, then replicate our local database to it.
@@ -106,6 +107,22 @@ export default Adapter.extend({
                 fields: ['isSynced'],
                 name: 'syncIndex',
                 ddoc: 'designSyncDoc'
+            }
+        }).then(() => {
+            return db;
+        }).catch(() => {
+            return null;
+        });
+    },
+
+    createMoodTimeIndex(db) {
+        'use strict';
+
+        db.createIndex({
+            index: {
+                fields: ['moodTime'],
+                name: 'moodTimeIndex',
+                ddoc: 'designMoodTimeDoc'
             }
         }).then(() => {
             return db;

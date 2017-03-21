@@ -84,6 +84,22 @@ export default Route.extend(ResetScrollMixin, {
         }
     },
 
+    getMoodByMoodTime(moodTime) {
+        'use strict';
+
+        const db = this.store.adapterFor('application').get('db');
+
+        if (db) {
+            return db.find({
+                selector: {
+                    moodTime: {
+                        $eq: moodTime
+                    }
+                }
+            });
+        }
+    },
+
     actions: {
 
         moodValueSet(emotion, value) {
@@ -134,29 +150,32 @@ export default Route.extend(ResetScrollMixin, {
 
             moodRecord.set('moodTime', this.controllerFor('moods.add').get('moodDateTimeUTC'));
 
+            // Just to make sure, since isSynced: false by default
             moodRecord.set('isSynced', false);
 
-            moodRecord.save()
-                .then(() => {
-                    this.controllerFor('application').set('errorMessage', null);
-                    this.controllerFor('application').set('successMessage',
-                        'moodTracker.success.goodWork');
+            const moodTime = new Date(moodRecord.get('moodTime')).getTime();
 
-                    this.send('trackAnotherMood');
-                }, (reason) => {
-                    // Failure callback
-                    if (reason) {
-                        let error = null;
+            this.getMoodByMoodTime(moodTime)
+                .then((result) => {
+                    if (result && result.docs.length > 0) {
+                        // Duplicate mood timestamp
+                        this.controllerFor('application').set('errorMessage',
+                            'moodTracker.error.duplicateMood');
+                    } else {
+                        moodRecord.save()
+                            .then(() => {
+                                this.controllerFor('application').set('errorMessage', null);
+                                this.controllerFor('application').set('successMessage',
+                                    'moodTracker.success.goodWork');
 
-                        if (reason.errors && reason.errors.moodTime) {
-                            // Duplicate mood timestamp
-                            error = 'moodTracker.error.duplicateMood';
-                        } else {
-                            // Internal Server Error (500)
-                            error = 'moodTracker.error.server';
-                        }
-
-                        this.controllerFor('application').set('errorMessage', error);
+                                this.send('trackAnotherMood');
+                            }, (reason) => {
+                                // Failure callback
+                                if (reason) {
+                                    this.controllerFor('application').set('errorMessage',
+                                        'serverError.runtime.error');
+                                }
+                            });
                     }
                 });
         },
