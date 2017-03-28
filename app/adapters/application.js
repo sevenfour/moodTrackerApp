@@ -6,6 +6,7 @@ import debug from 'ember-debug';
 import { Adapter } from 'ember-pouch';
 import { isEmpty } from 'ember-utils';
 import { assert } from 'ember-metal/utils';
+import { createSyncIndex, createMoodTimeIndex } from '../utils/pouchdb';
 
 const { log } = debug;
 
@@ -29,14 +30,30 @@ export default Adapter.extend({
         return header;
     }),
 
+    generateId() {
+        'use strict';
+
+        return new Date().toJSON();
+    },
+
+    createRecord(store, type, snapshot) {
+        'use strict';
+
+        if (!snapshot.id) {
+            snapshot.id = this.generateId();
+        }
+
+        return this._super(store, type, snapshot);
+    },
+
     init() {
         'use strict';
 
         this._super(...arguments);
 
         const db = this.createDB();
-        const dbWithSyncIndex = this.createSyncIndex(db) || db;
-        const dbWithMoodTimeIndex = this.createMoodTimeIndex(dbWithSyncIndex) || db;
+        const dbWithSyncIndex = createSyncIndex(db) || db;
+        const dbWithMoodTimeIndex = createMoodTimeIndex(dbWithSyncIndex) || db;
 
         this.set('db', dbWithMoodTimeIndex);
 
@@ -97,38 +114,6 @@ export default Adapter.extend({
         });
 
         return remoteDb;
-    },
-
-    createSyncIndex(db) {
-        'use strict';
-
-        db.createIndex({
-            index: {
-                fields: ['isSynced'],
-                name: 'syncIndex',
-                ddoc: 'designSyncDoc'
-            }
-        }).then(() => {
-            return db;
-        }).catch(() => {
-            return null;
-        });
-    },
-
-    createMoodTimeIndex(db) {
-        'use strict';
-
-        db.createIndex({
-            index: {
-                fields: ['moodTime'],
-                name: 'moodTimeIndex',
-                ddoc: 'designMoodTimeDoc'
-            }
-        }).then(() => {
-            return db;
-        }).catch(() => {
-            return null;
-        });
     }
 
 });

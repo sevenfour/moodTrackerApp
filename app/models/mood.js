@@ -4,6 +4,7 @@ import { hasMany } from 'ember-data/relationships';
 
 export default Model.extend({
     moodTime: attr('date'),
+    moodTimeInMillisec: attr('number'),
     anxiety: attr('number', { defaultValue: 0 }),
     sadness: attr('number', { defaultValue: 0 }),
     worry: attr('number', { defaultValue: 0 }),

@@ -6,6 +6,7 @@ import computed from 'ember-computed';
 import { alias } from 'ember-computed';
 import fetch from 'ember-network/fetch';
 import debug from 'ember-debug';
+import { typeOf } from 'ember-utils';
 import ApplicationRouteMixin from 'ember-simple-auth/mixins/application-route-mixin';
 import { task, all } from 'ember-concurrency';
 
@@ -98,6 +99,29 @@ export default Route.extend(ApplicationRouteMixin, {
         'use strict';
 
         return this.get('i18n').t('document.title');
+    },
+
+    activate() {
+        'use strict';
+
+        const db = this.get('store').adapterFor('application').get('db');
+
+        let changes = db.changes({
+            since: 'now',
+            live: true,
+            include_docs: true,    // eslint-disable-line camelcase
+            returnDocs: false,
+            filter(doc) {
+                return !doc.isSynced;
+            }
+        }).on('change', (change) => {
+            // this.processDBChange(change);
+            this.get('processDBChange').perform(change);
+        }).on('error', (err) => {
+            this.processDBErr(err);
+        });
+
+        this.set('changes', changes);
     },
 
     getUser(transition, userURL, token) {
@@ -283,6 +307,7 @@ export default Route.extend(ApplicationRouteMixin, {
             // NOTE: for testing purposes only generate _id field
             const modifiedMoods = moods.map((mood) => {
                 mood._id = `mood_${mood.id}`;
+                mood.moodTimeInMillisec = new Date(mood.moodTime).getTime();
                 mood.isSynced = true;
                 return mood;
             });
@@ -293,12 +318,54 @@ export default Route.extend(ApplicationRouteMixin, {
         this.createMoodRecords(moods, store);
     },
 
+    processDBChange: task(function* (change) {
+        'use strict';
+
+        const store = this.get('store');
+        const db = this.get('store').adapterFor('application').get('db');
+        const { _id, _rev, data } = change.doc;
+
+        // Strip unnecessary metadata
+        const moodId = _id.replace(/\w+\_/, '');
+
+        // Just to double check
+        if (data && !data.isSynced) {
+            yield all(this.saveMoodsData([data]));
+
+            // Update Ember Data
+            store.peekRecord('mood', moodId).set('isSynced', true);
+
+            // Update PouchDB
+            db.put({
+              _id,
+              _rev,
+              isSynced: true
+            });
+        }
+    }).drop(),
+
+    processDBErr(err) {
+        'use strict';
+
+        log(err);
+    },
+
     destroyDB() {
         'use strict';
 
         const db = this.get('store').adapterFor('application').get('db');
 
         return db.destroy();
+    },
+
+    unsubscribeDBChanges() {
+        'use strict';
+
+        const changes = this.get('changes');
+
+        if (changes) {
+            changes.cancel();
+        }
     },
 
     invalidateSession() {
@@ -309,6 +376,8 @@ export default Route.extend(ApplicationRouteMixin, {
 
     destroyDBAndInvalidate() {
         'use strict';
+
+        this.unsubscribeDBChanges();
 
         this.destroyDB()
             .then(({ ok }) => {
@@ -328,13 +397,20 @@ export default Route.extend(ApplicationRouteMixin, {
         const token = this.get('session.data.authenticated.token');
 
         return moods.map((mood) => {
-            let moodHash = mood.serialize();
+            // Check if mood is an instance of an Ember Data class
+            if (typeOf(mood) === 'instance') {
+                mood = mood.serialize();
+
+                // Remove non-persistent attributes specific for instance
+                delete mood.id;
+                delete mood.rev;
+            }
 
             // Remove non-persistent attributes
-            delete moodHash.isSynced;
-            delete moodHash.rev;
+            delete mood.isSynced;
+            delete mood.moodTimeInMillisec;
 
-            return this.postMood(moodsURL, moodHash, token);
+            return this.postMood(moodsURL, mood, token);
         });
 
     },

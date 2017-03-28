@@ -40,6 +40,15 @@ export default Route.extend(ResetScrollMixin, {
         clearObject(controller.get('error'));
     },
 
+    activate() {
+        'use strict';
+
+        const db = this.store.adapterFor('application').get('db');
+
+        // Clean up old indexes
+        db.viewCleanup();
+    },
+
     deactivate() {
         'use strict';
 
@@ -84,20 +93,12 @@ export default Route.extend(ResetScrollMixin, {
         }
     },
 
-    getMoodByMoodTime(moodTime) {
+    getMoodByMoodTime(time) {
         'use strict';
 
-        const db = this.store.adapterFor('application').get('db');
-
-        if (db) {
-            return db.find({
-                selector: {
-                    moodTime: {
-                        $eq: moodTime
-                    }
-                }
-            });
-        }
+        return this.store.queryRecord('mood', {
+            filter: { moodTimeInMillisec: time }
+        });
     },
 
     actions: {
@@ -147,17 +148,18 @@ export default Route.extend(ResetScrollMixin, {
             'use strict';
 
             const moodRecord = this.modelFor(this.routeName).mood;
+            const moodTimeUTC = this.controllerFor('moods.add').get('moodDateTimeUTC');
+            const moodTimeInMillisec = new Date(moodTimeUTC).getTime();
 
-            moodRecord.set('moodTime', this.controllerFor('moods.add').get('moodDateTimeUTC'));
+            moodRecord.set('moodTime', moodTimeUTC);
+            moodRecord.set('moodTimeInMillisec', moodTimeInMillisec);
 
             // Just to make sure, since isSynced: false by default
             moodRecord.set('isSynced', false);
 
-            const moodTime = new Date(moodRecord.get('moodTime')).getTime();
-
-            this.getMoodByMoodTime(moodTime)
+            this.getMoodByMoodTime(moodTimeInMillisec)
                 .then((result) => {
-                    if (result && result.docs.length > 0) {
+                    if (result) {
                         // Duplicate mood timestamp
                         this.controllerFor('application').set('errorMessage',
                             'moodTracker.error.duplicateMood');

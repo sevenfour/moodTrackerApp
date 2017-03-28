@@ -1,5 +1,6 @@
 /* global require, module */
-var EmberApp = require('ember-cli/lib/broccoli/ember-app');
+let EmberApp = require('ember-cli/lib/broccoli/ember-app');
+let autoprefixer = require('autoprefixer');
 
 module.exports = function(defaults) {
     let app = new EmberApp(defaults, {
@@ -24,6 +25,20 @@ module.exports = function(defaults) {
             paths: [
                 'app/svg-store'
             ]
+        },
+
+        postcssOptions: {
+            compile: {
+                enabled: false
+            },
+            filter: {
+                enabled: true,
+                plugins: [
+                    {
+                        module: autoprefixer
+                    }
+                ]
+            }
         },
 
         // ember-cli-inline-content
