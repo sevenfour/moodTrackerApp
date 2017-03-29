@@ -26,6 +26,12 @@ export default Component.extend({
 
     actions: {
 
+        sync() {
+            'use strict';
+
+            this.sync();
+        },
+
         switchLanguage() {
             'use strict';
 

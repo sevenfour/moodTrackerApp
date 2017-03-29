@@ -32,7 +32,12 @@ export default {
         '13': 'Autre', // *
         '14': 'Image corporelle', // *
         '15': 'Déplacements', // *
-        '16': 'Voyages' // *
+        '16': 'Voyages', // *
+        '17': 'École', // *
+        '18': 'Conditions de Vie', // *
+        '19': 'Pression des Pairs', // *
+        '20': 'Intimidation', // *
+        '21': 'Sexe/Sexualité' // *
     },
 
     'trigger': {
@@ -57,7 +62,9 @@ export default {
     /* Data synchronization - START - ----------------------------------------------------------- */
 
     'dataSync': {
-        'savingData': 'Saving data - Fr -'
+        'sync': 'Sync - Fr -',
+        'savingData': 'Saving data... - Fr -',
+        'successfullySynced': 'Data has been synced successfully! - Fr -'
     },
 
     /* Data synchronization - END - ------------------------------------------------------------- */

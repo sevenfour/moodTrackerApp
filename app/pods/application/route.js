@@ -78,7 +78,8 @@ export default Route.extend(ApplicationRouteMixin, {
         return RSVP.hash({
             user,
             config,
-            moods
+            moods,
+            isSyncing: this.get('syncMoods')
         });
     },
 
@@ -115,7 +116,6 @@ export default Route.extend(ApplicationRouteMixin, {
                 return !doc.isSynced;
             }
         }).on('change', (change) => {
-            // this.processDBChange(change);
             this.get('processDBChange').perform(change);
         }).on('error', (err) => {
             this.processDBErr(err);
@@ -226,13 +226,19 @@ export default Route.extend(ApplicationRouteMixin, {
     postMood(moodsURL, moodHash, token) {
         'use strict';
 
-        fetch(moodsURL, {
+        return fetch(moodsURL, {
             method: 'POST',
             headers: {
                 'content-type': 'application/json',
                 'Authorization': `Basic ${token}`
             },
             body: JSON.stringify(moodHash)
+        })
+        .then((response) => {
+            return response;
+        })
+        .catch((reason) => {
+            return reason;
         });
     },
 
@@ -281,12 +287,10 @@ export default Route.extend(ApplicationRouteMixin, {
         if (areObjectsFromPouch) {
             // moodObjects came from PouchDB
             moodsArray = moodObjects.map((obj) => {
-                if (obj.doc.data) {
-                    obj.doc.data.id = obj.doc._id.replace(/\w+_/, '');
-                    return obj.doc.data;
+                if (obj.doc) {
+                    obj.doc.id = obj.doc._id.replace(/\w+_/, '');
+                    return obj.doc;
                 }
-
-                return obj.doc;
             });
         }
 
@@ -326,21 +330,24 @@ export default Route.extend(ApplicationRouteMixin, {
         const { _id, _rev, data } = change.doc;
 
         // Strip unnecessary metadata
-        const moodId = _id.replace(/\w+\_/, '');
+        const moodId = _id.replace(/\w+_/, '');
 
         // Just to double check
         if (data && !data.isSynced) {
-            yield all(this.saveMoodsData([data]));
+            yield all(this.saveMoodsData([data]))
+                .then((responses) => {
+                    if (responses[0].ok) {
+                        // Update Ember Data
+                        store.peekRecord('mood', moodId).set('isSynced', true);
 
-            // Update Ember Data
-            store.peekRecord('mood', moodId).set('isSynced', true);
-
-            // Update PouchDB
-            db.put({
-              _id,
-              _rev,
-              isSynced: true
-            });
+                        // Update PouchDB
+                        db.put({
+                            _id,
+                            _rev,
+                            isSynced: true
+                        });
+                    }
+                });
         }
     }).drop(),
 
@@ -404,6 +411,14 @@ export default Route.extend(ApplicationRouteMixin, {
                 // Remove non-persistent attributes specific for instance
                 delete mood.id;
                 delete mood.rev;
+
+                const stressors = mood.stressors;
+
+                if (stressors.length > 0) {
+                    mood.stressors = stressors.map((stressor) => {
+                        return stressor.id;
+                    });
+                }
             }
 
             // Remove non-persistent attributes
@@ -412,16 +427,82 @@ export default Route.extend(ApplicationRouteMixin, {
 
             return this.postMood(moodsURL, mood, token);
         });
-
     },
+
+    cancelTask(task) {
+        'use strict';
+
+        this.get(task).cancelAll();
+    },
+
+    syncMoods: task(function* (moods) {
+        'use strict';
+
+        const store = this.get('store');
+        const db = this.get('store').adapterFor('application').get('db');
+
+        yield all(this.saveMoodsData(moods))
+            .then((responses) => {
+                responses.forEach((response) => {
+                    if (response.ok) {
+                      response.json().then((result) => {
+
+                          store.queryRecord('mood', {
+                              filter: { moodTimeInMillisec: result.moodTime }
+                          }).then((mood) => {
+                              // Update Ember Data
+                              mood.set('isSynced', true);
+
+                              // TODO: refactor the following hacky logic
+                              /*
+                               * Since ember-pouch is based on relational-pouch,
+                               * the id is a combination of record name plus number representing
+                               * data type.
+                               * Use '2' because record name is of type String as per rel-pouch specs.
+                              */
+                              const _id = `mood_2_${mood.get('id')}`;
+                              const _rev = mood.get('rev');
+
+                              // Update PouchDB
+                              db.put({
+                                  _id,
+                                  _rev,
+                                  isSynced: true
+                              });
+                          });
+                      });
+                    } else {
+                        // TODO: communicate to the UI which mood failed to sync
+                        this.controllerFor('application').set('errorMessage',
+                            'serverError.runtime.error');
+
+                        this.cancelTask('syncMoods');
+                    }
+                });
+            });
+    }).drop(),
 
     saveMoodsAndInvalidateTask: task(function* (moods) {
         'use strict';
 
-        // TODO: implement scenario when saveMoodsData fails
-        yield all(this.saveMoodsData(moods));
+        yield all(this.saveMoodsData(moods))
+            .then((responses) => {
+                const isAnyFailed = responses.any((response) => {
+                    return !response.ok;
+                });
 
-        this.destroyDBAndInvalidate();
+                if (isAnyFailed) {
+                    // An error occured saving data
+                    this.controllerFor('application').set('errorMessage',
+                        'serverError.runtime.error');
+
+                    this.controllerFor(this.routeName).set('isSaving', false);
+
+                    // TODO: analyze response and implement logic for handling failed fetch
+                } else {
+                    this.destroyDBAndInvalidate();
+                }
+            });
     }).drop(),
 
     reloadRoute() {
@@ -443,6 +524,20 @@ export default Route.extend(ApplicationRouteMixin, {
                 // add issue
                 list.addObject(issue);
             }
+        },
+
+        sync() {
+            'use strict';
+
+            this.getUnsyncedMoods().then((moods) => {
+                if (moods.get('length') === 0) {
+                    // All records have been synced
+                    log('All moods have been synced.');
+                } else {
+                    // Perform syncing
+                    this.get('syncMoods').perform(moods);
+                }
+            });
         },
 
         switchLanguage() {

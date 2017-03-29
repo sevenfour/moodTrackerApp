@@ -8,7 +8,9 @@
         imgSource='logo'}}
     {{drawer-menu
         userFirstName=model.user.firstName
+        isSyncing=isSyncing
         isSaving=isSaving
+        sync=(route-action 'sync')
         switchLanguage=(route-action 'switchLanguage')
         logout=(route-action 'logout')}}
 {{else}}

@@ -32,7 +32,12 @@ export default {
         '13': 'Other',
         '14': 'Body Image',
         '15': 'Commute',
-        '16': 'Travel'
+        '16': 'Travel',
+        '17': 'School',
+        '18': 'Living Situation',
+        '19': 'Peer Pressure',
+        '20': 'Bullying',
+        '21': 'Gender/Sexuality'
     },
 
     'trigger': {
@@ -56,7 +61,9 @@ export default {
     /* Data synchronization - START - ----------------------------------------------------------- */
 
     'dataSync': {
-        'savingData': 'Saving data'
+        'sync': 'Sync',
+        'savingData': 'Saving data...',
+        'successfullySynced': 'Data has been synced successfully!'
     },
 
     /* Data synchronization - END - ------------------------------------------------------------- */
