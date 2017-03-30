@@ -1,5 +1,6 @@
 import Component from 'ember-component';
 import computed from 'ember-computed';
+import { not } from 'ember-computed';
 import { checkFirstName } from '../../../utils/strings';
 
 export default Component.extend({
@@ -7,6 +8,14 @@ export default Component.extend({
     tagName: 'nav',
 
     classNames: ['drawer-menu'],
+
+    isSyncDisabled: not('isSyncEnabled'),
+
+    headerFirstName: computed('firstName', function() {
+        'use strict';
+
+        return checkFirstName(this.get('firstName'));
+    }),
 
     languageLink: computed('i18n.locale', function() {
         'use strict';
@@ -16,12 +25,6 @@ export default Component.extend({
         } else {
             return 'Français';
         }
-    }),
-
-    headerFirstName: computed('firstName', function() {
-        'use strict';
-
-        return checkFirstName(this.get('firstName'));
     }),
 
     actions: {

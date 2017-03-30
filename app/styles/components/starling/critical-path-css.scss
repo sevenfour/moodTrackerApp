@@ -144,7 +144,7 @@ p {
 .btn[ disabled ]:focus,
 .btn[ disabled ]:active,
 .btn[ disabled ].active {
-    opacity: 30;
+    opacity: 0.3;
 }
 
 .btn-functionality:hover,
@@ -192,7 +192,7 @@ p {
 .btn-yes[ disabled ]:hover,
 .btn-yes[ disabled ]:focus,
 .btn-yes[ disabled ]:active {
-    opacity: 30;
+    opacity: 0.3;
 }
 
 .btn-round-with-icon {
@@ -242,7 +242,7 @@ p {
 .btn-round-with-icon[ disabled ]:hover,
 .btn-round-with-icon[ disabled ]:focus,
 .btn-round-with-icon[ disabled ]:active {
-    opacity: 30;
+    opacity: 0.3;
 }
 
 /* Core styles - END - -------------------------------------------------------------------------- */
@@ -336,6 +336,10 @@ p {
         &.active {
             color: $true-blue;
         }
+    }
+
+    .navbar-btn[ disabled ] {
+        opacity: 0.3;
     }
 
     .navbar-btn {

@@ -14,7 +14,8 @@
     </li>
     <li role="separator" class="navbar-drawer-item divider"></li>
     <li class="navbar-drawer-item">
-        <button type="button" class="navbar-btn" {{action 'sync'}}>
+        <button type="button" class="navbar-btn"
+            disabled={{isSyncDisabled}} {{action 'sync'}}>
             {{#if isSyncing}}
                 {{t 'dataSync.savingData'}}
             {{else}}

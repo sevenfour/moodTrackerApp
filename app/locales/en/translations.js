@@ -51,6 +51,7 @@ export default {
 
     'serverError': {
         'unauthorized': 'Sign in details are not correct. Please try again.',
+        'noInternetConnection': 'Sorry, there is no Internet connection. The data cannot be synced.',
         'runtime.error': 'There was a problem processing your request. Please try again later.'
     },
 

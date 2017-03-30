@@ -181,7 +181,7 @@ export default Route.extend(ApplicationRouteMixin, {
             });
         }
     },
-
+ 
     getUnsyncedMoods() {
         'use strict';
 
@@ -284,6 +284,8 @@ export default Route.extend(ApplicationRouteMixin, {
         };
 
         store.pushPayload('mood', moodRecords);
+
+        return store.peekAll('mood');
     },
 
     saveMoodsIntoDB(moods) {
@@ -305,35 +307,6 @@ export default Route.extend(ApplicationRouteMixin, {
 
         this.createMoodRecords(moods, store);
     },
-
-    processDBChange: task(function* (change) {
-        'use strict';
-
-        const store = this.get('store');
-        const db = this.get('store').adapterFor('application').get('db');
-        const { _id, _rev, data } = change.doc;
-
-        // Strip unnecessary metadata
-        const moodId = _id.replace(/\w+_/, '');
-
-        // Just to double check
-        if (data && !data.isSynced) {
-            yield all(this.saveMoodsData([data]))
-                .then((responses) => {
-                    if (responses[0].ok) {
-                        // Update Ember Data
-                        store.peekRecord('mood', moodId).set('isSynced', true);
-
-                        // Update PouchDB
-                        db.put({
-                            _id,
-                            _rev,
-                            isSynced: true
-                        });
-                    }
-                });
-        }
-    }).drop(),
 
     processDBErr(err) {
         'use strict';
@@ -413,6 +386,64 @@ export default Route.extend(ApplicationRouteMixin, {
         });
     },
 
+    checkInternetConnection() {
+        'use strict';
+
+        const token = this.get('session.data.authenticated.token');
+
+        return fetch('mobile/', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Basic ${token}`
+            }
+            })
+            .then((response) => {
+                if (response.ok) {
+                    return { ok: true };
+                } else {
+                    return response.json();
+                }
+            })
+            .catch(() => {
+                return { ok: false };
+            });
+    },
+
+    reloadRoute() {
+        'use strict';
+
+        window.location.reload();
+    },
+
+    processDBChange: task(function* (change) {
+        'use strict';
+
+        const store = this.get('store');
+        const db = this.get('store').adapterFor('application').get('db');
+        const { _id, _rev, data } = change.doc;
+
+        // Strip unnecessary metadata
+        const moodId = _id.replace(/\w+_/, '');
+
+        // Just to double check
+        if (data && !data.isSynced) {
+            yield all(this.saveMoodsData([data]))
+                .then((responses) => {
+                    if (responses[0].ok) {
+                        // Update Ember Data
+                        store.peekRecord('mood', moodId).set('isSynced', true);
+
+                        // Update PouchDB
+                        db.put({
+                            _id,
+                            _rev,
+                            isSynced: true
+                        });
+                    }
+                });
+        }
+    }).drop(),
+
     syncMoods: task(function* (moods) {
         'use strict';
 
@@ -475,12 +506,6 @@ export default Route.extend(ApplicationRouteMixin, {
             });
     }).drop(),
 
-    reloadRoute() {
-        'use strict';
-
-        window.location.reload();
-    },
-
     actions: {
 
         // invoked when user selects an item to add to a list
@@ -499,15 +524,25 @@ export default Route.extend(ApplicationRouteMixin, {
         sync() {
             'use strict';
 
-            this.getUnsyncedMoods().then((moods) => {
-                if (moods.get('length') === 0) {
-                    // All records have been synced
-                    log('All moods have been synced.');
-                } else {
-                    // Perform syncing
-                    this.get('syncMoods').perform(moods);
-                }
-            });
+            // Check Internet connection
+            this.checkInternetConnection()
+                .then((response) => {
+                    if (response.ok) {
+                        // There is an Internet connection
+                        this.getUnsyncedMoods().then((moods) => {
+                            if (moods.get('length') === 0) {
+                                // All records have been synced
+                                log('All moods have been synced.');
+                            } else {
+                                // Perform syncing
+                                this.get('syncMoods').perform(moods);
+                            }
+                        });
+                    } else if (!response.ok) {
+                        this.controllerFor('application').set('errorMessage',
+                            'serverError.noInternetConnection');
+                    }
+                });
         },
 
         switchLanguage() {

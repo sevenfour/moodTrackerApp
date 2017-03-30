@@ -1,6 +1,6 @@
 import Controller from 'ember-controller';
 import service from 'ember-service/inject';
-import { alias } from 'ember-computed';
+import { alias, filterBy, gt } from 'ember-computed';
 
 export default Controller.extend({
 
@@ -12,6 +12,12 @@ export default Controller.extend({
 
     isSyncing: alias('model.isSyncing.isRunning'),
 
-    isSaving: false
+    isSaving: false,
+
+    moods: alias('model.moods'),
+
+    unsyncedMoods: filterBy('moods', 'isSynced', false),
+
+    areAnyUnsyncedMoods: gt('unsyncedMoods.length', 0)
 
 });

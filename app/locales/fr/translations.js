@@ -51,6 +51,8 @@ export default {
 
     'serverError': {
         'unauthorized': 'Les données d’ouverture de session sont incorrectes. Veuillez réessayer.',
+        'noInternetConnection': `Sorry, there is no Internet connection.
+            The data cannot be synced. - Fr -`,
         'runtime.error': `Un problème est survenu dans le traitement de votre requête.
             Veuillez réessayer plus tard.` // *
     },
