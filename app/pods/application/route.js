@@ -127,55 +127,45 @@ export default Route.extend(ApplicationRouteMixin, {
     getUser(transition, userURL, token) {
         'use strict';
 
-        return new RSVP.Promise((resolve) => {
-            fetch(userURL, {
-                method: 'GET',
-                headers: {
-                  'Authorization': `Basic ${token}`
-                }
-                })
-                .then((response) => {
-                    if (response.ok) {
-                        return response.json();
-                    } else if (response.status === 401) {
-                        if (transition) {
-                            transition.send('logout');
-                        } else {
-                            this.send('logout');
-                        }
+        return fetch(userURL, {
+            method: 'GET',
+            headers: {
+              'Authorization': `Basic ${token}`
+            }
+            })
+            .then((response) => {
+                if (response.ok) {
+                    return response.json();
+                } else if (response.status === 401) {
+                    if (transition) {
+                        transition.send('logout');
+                    } else {
+                        this.send('logout');
                     }
-                })
-                .then((result) => {
-                    resolve(result);
-                });
-        });
+                }
+            });
     },
 
     getConfig(transition, configURL, token) {
         'use strict';
 
-        return new RSVP.Promise((resolve) => {
-            fetch(configURL, {
-                method: 'GET',
-                headers: {
-                  'Authorization': `Basic ${token}`
+        return fetch(configURL, {
+            method: 'GET',
+            headers: {
+              'Authorization': `Basic ${token}`
+            }
+            })
+            .then((response) => {
+                if (response.ok) {
+                    return response.json();
+                } else if (response.status === 401) {
+                  if (transition) {
+                      transition.send('logout');
+                  } else {
+                      this.send('logout');
+                  }
                 }
-                })
-                .then((response) => {
-                    if (response.ok) {
-                        return response.json();
-                    } else if (response.status === 401) {
-                      if (transition) {
-                          transition.send('logout');
-                      } else {
-                          this.send('logout');
-                      }
-                    }
-                })
-                .then((result) => {
-                    resolve(result);
-                });
-        });
+            });
     },
 
     getMoods() {
@@ -203,24 +193,19 @@ export default Route.extend(ApplicationRouteMixin, {
     fetchMoods(moodsURL, token) {
         'use strict';
 
-        return new RSVP.Promise((resolve) => {
-            fetch(moodsURL, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Basic ${token}`
+        return fetch(moodsURL, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Basic ${token}`
+            }
+            })
+            .then((response) => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    this.send('logout');
                 }
-                })
-                .then((response) => {
-                    if (response.ok) {
-                        return response.json();
-                    } else {
-                        this.send('logout');
-                    }
-                })
-                .then((result) => {
-                    resolve(result);
-                });
-        });
+            });
     },
 
     postMood(moodsURL, moodHash, token) {
@@ -308,7 +293,6 @@ export default Route.extend(ApplicationRouteMixin, {
         const db = store.adapterFor('application').get('db');
 
         if (db) {
-            // NOTE: for testing purposes only generate _id field
             const modifiedMoods = moods.map((mood) => {
                 mood._id = `mood_${mood.id}`;
                 mood.moodTimeInMillisec = new Date(mood.moodTime).getTime();
@@ -429,57 +413,43 @@ export default Route.extend(ApplicationRouteMixin, {
         });
     },
 
-    cancelTask(task) {
-        'use strict';
-
-        this.get(task).cancelAll();
-    },
-
     syncMoods: task(function* (moods) {
         'use strict';
 
         const store = this.get('store');
         const db = this.get('store').adapterFor('application').get('db');
+        const responses = yield all(this.saveMoodsData(moods));
 
-        yield all(this.saveMoodsData(moods))
-            .then((responses) => {
-                responses.forEach((response) => {
-                    if (response.ok) {
-                      response.json().then((result) => {
+        responses.forEach((response) => {
+            if (response.ok) {
+              response.json().then((result) => {
 
-                          store.queryRecord('mood', {
-                              filter: { moodTimeInMillisec: result.moodTime }
-                          }).then((mood) => {
-                              // Update Ember Data
-                              mood.set('isSynced', true);
+                  store.queryRecord('mood', {
+                      filter: { moodTimeInMillisec: result.moodTime }
+                  }).then((mood) => {
+                      // Update Ember Data
+                      mood.set('isSynced', true);
 
-                              // TODO: refactor the following hacky logic
-                              /*
-                               * Since ember-pouch is based on relational-pouch,
-                               * the id is a combination of record name plus number representing
-                               * data type.
-                               * Use '2' because record name is of type String as per rel-pouch specs.
-                              */
-                              const _id = `mood_2_${mood.get('id')}`;
-                              const _rev = mood.get('rev');
+                      // TODO: refactor the following hacky logic
+                      /*
+                       * Since ember-pouch is based on relational-pouch,
+                       * the id is a combination of record name plus number representing
+                       * data type.
+                       * Use '2' because record name is of type String as per rel-pouch specs.
+                      */
+                      const _id = `mood_2_${mood.get('id')}`;
+                      const _rev = mood.get('rev');
 
-                              // Update PouchDB
-                              db.put({
-                                  _id,
-                                  _rev,
-                                  isSynced: true
-                              });
-                          });
+                      // Update PouchDB
+                      db.put({
+                          _id,
+                          _rev,
+                          isSynced: true
                       });
-                    } else {
-                        // TODO: communicate to the UI which mood failed to sync
-                        this.controllerFor('application').set('errorMessage',
-                            'serverError.runtime.error');
-
-                        this.cancelTask('syncMoods');
-                    }
-                });
-            });
+                  });
+              });
+            }
+        });
     }).drop(),
 
     saveMoodsAndInvalidateTask: task(function* (moods) {
