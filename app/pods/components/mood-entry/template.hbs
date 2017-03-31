@@ -1,0 +1,15 @@
+<span class="mood-date">{{formattedDate}}</span>
+<span class="mood-time">{{formattedTime}}</span>
+{{#if moodTrigger}}
+    <span class="mood-data mood-trigger pull-right">{{moodTrigger}}</span>
+    <span class="mood-data-title pull-right">{{t 'moodEntry.triggerTile'}}:</span>
+{{/if}}
+<div class="mood-behaviour-holder col-xs-12 col-sm-12 col-md-12">
+    <p class="mood-data">{{mood.behaviour}}</p>
+</div>
+{{#if areAnyStressors}}
+    <span class="mood-data-title">{{t 'moodEntry.stressorsTitle'}}:</span>
+    {{#each stressors as |stressor|}}
+        <span class="mood-data">{{stressor.name}}</span> 
+    {{/each}}
+{{/if}}

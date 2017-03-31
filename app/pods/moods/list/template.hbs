@@ -14,27 +14,9 @@
         </div>
     {{/each}}
     {{#each model.moodList as |mood|}}
-        <p>
-            {{mood.moodTime}}
-        </p>
-        <p>
-            {{mood.behaviour}}
-        </p>
-        <div class="col-xs-4 col-sm-4 col-md-4">
-            <p>
-                {{mood.worry}}
-            </p>
-        </div>
-        <div class="col-xs-4 col-sm-4 col-md-4">
-            <p>
-                {{mood.anxiety}}
-            </p>
-        </div>
-        <div class="col-xs-4 col-sm-4 col-md-4">
-            <p>
-                {{mood.sadness}}
-            </p>
-        </div>
+        {{mood-entry
+            class='col-xs-12 col-sm-12 col-md-12'
+            mood=mood}}
     {{/each}}
     <div class="btn-holder col-xs-12 col-sm-12 col-md-12 text-center">
         {{#link-to 'my-starling' type='button' class='btn btn-discouraged'}}

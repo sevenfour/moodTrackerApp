@@ -124,6 +124,57 @@
     }
 }
 
+.mood-entry {
+    background-color: $gum-grape;
+    padding: 5px 5px 10px;
+    text-align: left;
+
+    &:last-child {
+        border-bottom: 1px solid $fanta-purple;
+    }
+
+    .mood-date {
+        margin-left: 5px;
+    }
+
+    .mood-time {
+        margin-left: 20px;
+    }
+
+    .mood-date,
+    .mood-time {
+        line-height: 1.214em;
+        font-family: 'Uniform Rounded Light';
+        font-size: 14px;
+    }
+
+    .mood-data-title {
+        line-height: 1.214em;
+        color: $fanta-purple;
+        font-family: 'Uniform Rounded Regular';
+        font-size: 14px;
+    }
+
+    .mood-data {
+        line-height: 1.214em;
+        color: $cement-grey;
+        font-family: 'Open Sans';
+        font-size: 14px;
+
+        &.mood-trigger {
+            margin: 0 15px 0 5px;
+        }
+    }
+
+    .mood-behaviour-holder {
+        margin: 5px 0;
+        border: 1px solid $bubble-gum-grape;
+        border-radius: 5px;
+        background-color: $light-grape;
+        padding: 5px;
+    }
+}
+
 /* Components styles - END - -------------------------------------------------------------------- */
 
 /* Pages styles - START - ----------------------------------------------------------------------- */
@@ -338,6 +389,17 @@
         color: $true-blue;
         font-family: 'Uniform Rounded Regular';
         font-size: $font-size-small;
+    }
+
+    .mood-entry {
+        margin-top: 10px;
+        border-top: 1px solid $fanta-purple;
+        border-bottom: 1px solid $fanta-purple;
+
+        ~ .mood-entry {
+            margin-top: 0;
+            border-top: none;
+        }
     }
 }
 

@@ -101,6 +101,11 @@ export default {
         'logout': 'Log Out'
     },
 
+    'moodEntry': {
+        'triggerTile': 'Trigger',
+        'stressorsTitle': 'Stressors'
+    },
+
     /* Components - END - ----------------------------------------------------------------------- */
 
     /* Pages - START - -------------------------------------------------------------------------- */

@@ -103,6 +103,11 @@ export default {
         'logout': 'Fermeture de session' // *
     },
 
+    'moodEntry': {
+        'triggerTile': 'Trigger - Fr -',
+        'stressorsTitle': 'Stresseurs' // *
+    },
+
     /* Components - END - ----------------------------------------------------------------------- */
 
     /* Pages - START - -------------------------------------------------------------------------- */

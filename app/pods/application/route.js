@@ -181,7 +181,7 @@ export default Route.extend(ApplicationRouteMixin, {
             });
         }
     },
- 
+
     getUnsyncedMoods() {
         'use strict';
 
@@ -524,7 +524,7 @@ export default Route.extend(ApplicationRouteMixin, {
         sync() {
             'use strict';
 
-            // Check Internet connection
+            // Check Internet connection first
             this.checkInternetConnection()
                 .then((response) => {
                     if (response.ok) {
@@ -629,18 +629,28 @@ export default Route.extend(ApplicationRouteMixin, {
         logout() {
             'use strict';
 
-            this.getUnsyncedMoods().then((moods) => {
-                if (moods.get('length') === 0) {
-                    // All records have been synced; proceed with logout
-                    this.destroyDBAndInvalidate();
-                } else {
-                    // Notify the data sync has began
-                    this.controllerFor(this.routeName).set('isSaving', true);
+            // Check Internet connection first
+            this.checkInternetConnection()
+                .then((response) => {
+                    if (response.ok) {
+                        // There is an Internet connection
+                        this.getUnsyncedMoods().then((moods) => {
+                            if (moods.get('length') === 0) {
+                                // All records have been synced; proceed with logout
+                                this.destroyDBAndInvalidate();
+                            } else {
+                                // Notify the data sync has began
+                                this.controllerFor(this.routeName).set('isSaving', true);
 
-                    // Sync records first; then, proceed with logout
-                    this.get('saveMoodsAndInvalidateTask').perform(moods);
-                }
-            });
+                                // Sync records first; then, proceed with logout
+                                this.get('saveMoodsAndInvalidateTask').perform(moods);
+                            }
+                        });
+                    } else if (!response.ok) {
+                        this.controllerFor('application').set('errorMessage',
+                            'serverError.noInternetConnection');
+                    }
+                });
         },
 
         error(error, transition) {
