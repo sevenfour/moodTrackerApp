@@ -90,8 +90,7 @@ module.exports = function(environment) {
         'connect-src': "'self' http://localhost:8080",
         'script-src': "'self' 'unsafe-inline' http://localhost:8080 https://f.vimeocdn.com",
         'style-src': "'self' 'unsafe-inline'",
-        'frame-src': "*",
-        'img-src': "'self' https://andrewsmfstorage.s3.amazonaws.com"
+        'frame-src': "*"
     };
 
     // Localization setup
